@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "47670534843",
+    "firebase_url": "https://match-53457.firebaseio.com",
+    "project_id": "match-53457",
+    "storage_bucket": "match-53457.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:47670534843:android:f0fddee85722efec667f9e",
+        "android_client_info": {
+          "package_name": "com.lgbtmatch.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "47670534843-0sjsqaqgq1pg103dhth1alh8dgku3qas.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXxRf86Rjlg68Y1vdO1w_71vsm2Tm2s_8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "47670534843-0sjsqaqgq1pg103dhth1alh8dgku3qas.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
