@@ -37,7 +37,7 @@ jobs:
         if: success()
         uses: wzieba/Firebase-Distribution-Github-Action
         with:
-          appId: ${{ secrets.FIREBASE_APP_ID }}
+          appId: ${{ secrets.FIREBASE_APP_ID_IOS_DEV }}
           token: ${{ secrets.FIREBASE_TOKEN }}
           groups: ios
-          file: build/app/outputs/apk/release/app-dev-release.apk
+          file: ios/build/Runner.ipa
