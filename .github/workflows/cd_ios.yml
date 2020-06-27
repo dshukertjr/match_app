@@ -33,19 +33,12 @@ jobs:
         run: |
           cd ios
           fastlane build
-      # - name: Use Node.js 10.x
-      #   uses: actions/setup-node@v1
-      #   with:
-      #     node-version: 10.x
-      # - name: Install Firebase
-      #   run: yarn install
-      # - name: Upload ipa
-      #   run: yarn run firebase appdistribution:distribute ios/build/Runner.ipa --app "${{ secrets.IOS_APP_ID }}" --token "${{ secrets.FIREBASE_TOKEN }}"
-      - name: Distribute dev App through Firebase App Distributions
-        if: success()
-        uses: wzieba/Firebase-Distribution-Github-Action@v1.2.2
+
+      - name: Use Node.js 10.x
+        uses: actions/setup-node@v1
         with:
-          appId: ${{ secrets.FIREBASE_APP_ID_IOS_DEV }}
-          token: ${{ secrets.FIREBASE_TOKEN }}
-          groups: ios
-          file: ios/build/Runner.ipa
+          node-version: 10.x
+      - name: Install Firebase
+        run: yarn install
+      - name: Upload ipa
+        run: yarn run firebase appdistribution:distribute ios/build/Runner.ipa --app "${{ secrets.FIREBASE_APP_ID_IOS_DEV }}" --token "${{ secrets.FIREBASE_TOKEN }}"
