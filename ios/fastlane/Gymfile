@@ -1,4 +1,4 @@
-scheme("Runner")
+scheme("dev")
 
 clean(true)
 

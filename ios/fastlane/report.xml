@@ -5,7 +5,32 @@
     
     
       
-      <testcase classname="fastlane.lanes" name="0: default_platform" time="0.0004">
+      <testcase classname="fastlane.lanes" name="0: default_platform" time="0.000347">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="1: is_ci" time="0.000192">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="2: is_ci" time="0.000187">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="3: match" time="7.277038">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="4: automatic_code_signing" time="0.211275">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="5: gym" time="87.560953">
         
       </testcase>
     
