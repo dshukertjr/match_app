@@ -35,5 +35,6 @@ class Validator {
     } else if (val.length <= 6) {
       return invalidPasswordMessage;
     }
+    return null;
   };
 }

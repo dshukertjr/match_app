@@ -1,6 +1,5 @@
 import 'package:app/blocs/auth/auth_bloc.dart';
 import 'package:app/pages/welcome/welcome_page.dart';
-import 'package:app/repositories/auth_repository.dart';
 import 'package:app/widgets/custom_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
