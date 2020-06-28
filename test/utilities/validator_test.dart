@@ -7,7 +7,7 @@ void main() {
       expect(Validator.requiredValidator(''), Validator.requiredMessage);
     });
     test('必須項目は一文字でも入っていればオッケー', () {
-      expect(Validator.requiredValidator(''), null);
+      expect(Validator.requiredValidator('a'), null);
     });
     test('Emailアドレスは適当な文字列ではダメ', () {
       expect(Validator.emailValidator('dfljsa'), Validator.invalidEmailMessage);
