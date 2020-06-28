@@ -18,7 +18,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   @override
   AuthState get initialState => AuthInitial();
 
-  FirebaseUser user;
+  String uid;
 
   @override
   Stream<AuthState> mapEventToState(
@@ -28,12 +28,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       yield* _mapAuthStartedToState();
     } else if (event is AuthUpdated) {
       yield* _mapAuthUpdatedToState();
+    } else if (event is AuthRegistered) {
+      yield* _mapAuthRegisteredToState(
+        email: event.email,
+        password: event.password,
+      );
     }
   }
 
   Stream<AuthState> _mapAuthStartedToState() async* {
-    user = await _authRepository.currentUser;
-    if (user == null) {
+    uid = await _authRepository.getUid;
+    if (uid == null) {
       yield AuthNoUser();
     } else {
       yield AuthNoProfile();
@@ -41,4 +46,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Stream<AuthState> _mapAuthUpdatedToState() async* {}
+
+  Stream<AuthState> _mapAuthRegisteredToState({
+    @required String email,
+    @required String password,
+  }) async* {
+    await _authRepository.register(email: email, password: password);
+    yield AuthNoProfile();
+  }
 }
