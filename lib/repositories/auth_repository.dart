@@ -12,6 +12,8 @@ abstract class AuthRepository {
   Stream<FirebaseUser> get onAuthStateChanged;
 
   Future<String> get getUid;
+
+  Future<String> register({@required String email, @required String password});
 }
 
 class AppAuthRepository extends AuthRepository {
@@ -24,4 +26,14 @@ class AppAuthRepository extends AuthRepository {
 
   @override
   Future<String> get getUid async => (await _authProvider.currentUser)?.uid;
+
+  @override
+  Future<String> register(
+      {@required String email, @required String password}) async {
+    final result = await _authProvider.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    return result.user.uid;
+  }
 }

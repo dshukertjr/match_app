@@ -1,6 +1,5 @@
 import 'package:app/data_providers/auth_provider.dart';
 import 'package:app/repositories/auth_repository.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 

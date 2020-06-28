@@ -1,5 +1,7 @@
+import 'package:app/blocs/auth/auth_bloc.dart';
 import 'package:app/utilities/validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RegisterPage extends StatefulWidget {
   static const name = 'RegisterPage';
@@ -47,6 +49,24 @@ class _RegisterPageState extends State<RegisterPage> {
                 labelText: 'パスワード',
               ),
               validator: Validator.passwordValidator,
+            ),
+            SizedBox(height: 24),
+            RaisedButton(
+              onPressed: () {
+                final isValid = _formKey.currentState.validate();
+                if (!isValid) {
+                  return;
+                }
+                final email = _emailController.text;
+                final password = _passwordController.text;
+                BlocProvider.of<AuthBloc>(context).add(
+                  AuthRegistered(
+                    email: email,
+                    password: password,
+                  ),
+                );
+              },
+              child: Text('登録する'),
             ),
           ],
         ),

@@ -14,6 +14,8 @@ void main() {
         final authRepository = MockAuthRepository();
 
         when(authRepository.getUid).thenAnswer((_) async => null);
+        when(authRepository.register(email: '', password: ''))
+            .thenAnswer((_) async => 'aaa');
         authBloc = AuthBloc(authRepository: authRepository);
       });
 
@@ -22,6 +24,13 @@ void main() {
         build: () async => authBloc,
         act: (bloc) async => bloc.add(AuthStarted()),
         expect: [AuthNoUser()],
+      );
+
+      blocTest(
+        'emits NoProfile after registering',
+        build: () async => authBloc,
+        act: (bloc) async => bloc.add(AuthRegistered(email: '', password: '')),
+        expect: [AuthNoProfile()],
       );
     });
 

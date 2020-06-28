@@ -17,3 +17,16 @@ class AuthUpdated extends AuthEvent {
   @override
   List<Object> get props => [user];
 }
+
+class AuthRegistered extends AuthEvent {
+  final String email;
+  final String password;
+
+  AuthRegistered({
+    @required this.email,
+    @required this.password,
+  });
+
+  @override
+  List<Object> get props => [];
+}
