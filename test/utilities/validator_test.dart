@@ -17,8 +17,7 @@ void main() {
           Validator.requiredValidator('dfljsa'), Validator.invalidEmailMessage);
     });
     test('普通のメールアドレスならオッケー', () {
-      expect(
-          Validator.requiredValidator('dshukertjr@gmail.com'), null);
+      expect(Validator.requiredValidator('dshukertjr@gmail.com'), null);
     });
   });
 }
