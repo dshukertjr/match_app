@@ -26,6 +26,7 @@ class WelcomePage extends StatelessWidget {
           ),
           SizedBox(height: 24),
           RaisedButton(
+            key: Key('welcomeRegisterButton'),
             onPressed: () {
               Navigator.of(context).push(RegisterPage.route());
             },
