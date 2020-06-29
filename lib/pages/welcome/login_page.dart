@@ -1,3 +1,4 @@
+import 'package:app/utilities/validator.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -37,6 +38,7 @@ class _LoginPageState extends State<LoginPage> {
               decoration: InputDecoration(
                 labelText: 'メールアドレス',
               ),
+              validator: Validator.emailValidator,
             ),
             SizedBox(height: 24),
             TextFormField(

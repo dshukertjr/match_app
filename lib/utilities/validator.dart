@@ -17,15 +17,10 @@ class Validator {
     return null;
   };
 
-  static final _emailRegex = RegExp(
-      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+  // static final _emailRegex = RegExp(
+  //     r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
 
   static String Function(String) emailValidator = (val) {
-    if (val.isEmpty) {
-      return requiredMessage;
-    } else if (!_emailRegex.hasMatch(val)) {
-      return invalidEmailMessage;
-    }
     return null;
   };
 
