@@ -14,15 +14,15 @@ class RegisterPage extends StatefulWidget {
 
   /// key for getting the email field in testing
   @visibleForTesting
-  static const emailTextFieldKey = ValueKey('registerEmail');
+  static const emailTextFieldKey = Key('registerEmail');
 
   /// key for getting the password field in testing
   @visibleForTesting
-  static const passwordTextFieldKey = ValueKey('registerPassword');
+  static const passwordTextFieldKey = Key('registerPassword');
 
   /// key for accessing the register button in testing
   @visibleForTesting
-  static const submitButtonKey = ValueKey('registerSubmitButton');
+  static const submitButtonKey = Key('registerSubmitButton');
 
   @override
   _RegisterPageState createState() => _RegisterPageState();
