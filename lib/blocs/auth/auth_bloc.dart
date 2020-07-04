@@ -33,6 +33,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         email: event.email,
         password: event.password,
       );
+    } else if (event is AuthLoggedin) {
+      yield* _mapAuthLoggedinToState(
+        email: event.email,
+        password: event.password,
+      );
     }
   }
 
@@ -52,6 +57,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     @required String password,
   }) async* {
     await _authRepository.register(email: email, password: password);
+    // TODO change destination depending on status
+    yield AuthNoProfile();
+  }
+
+  Stream<AuthState> _mapAuthLoggedinToState({
+    @required String email,
+    @required String password,
+  }) async* {
+    await _authRepository.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    // TODO change destination depending on status
     yield AuthNoProfile();
   }
 }

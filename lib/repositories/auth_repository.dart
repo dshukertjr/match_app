@@ -14,6 +14,9 @@ abstract class AuthRepository {
   Future<String> get getUid;
 
   Future<String> register({@required String email, @required String password});
+
+  Future<String> signInWithEmailAndPassword(
+      {@required String email, @required String password});
 }
 
 class AppAuthRepository extends AuthRepository {
@@ -34,6 +37,14 @@ class AppAuthRepository extends AuthRepository {
       email: email,
       password: password,
     );
+    return result.user.uid;
+  }
+
+  @override
+  Future<String> signInWithEmailAndPassword(
+      {@required String email, @required String password}) async {
+    final result = await _authProvider.signInWithEmailAndPassword(
+        email: email, password: password);
     return result.user.uid;
   }
 }
