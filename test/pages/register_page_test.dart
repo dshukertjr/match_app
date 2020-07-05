@@ -1,5 +1,4 @@
 import 'package:app/blocs/auth/auth_bloc.dart';
-import 'package:app/pages/account/login_page.dart';
 import 'package:app/pages/account/register_page.dart';
 import 'package:app/repositories/auth_repository.dart';
 import 'package:app/utilities/validator.dart';
