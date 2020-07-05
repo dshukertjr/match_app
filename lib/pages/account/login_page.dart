@@ -1,46 +1,48 @@
 import 'package:app/blocs/auth/auth_bloc.dart';
+import 'package:app/pages/account/register_page.dart';
 import 'package:app/utilities/validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class RegisterPage extends StatefulWidget {
-  static const name = 'RegisterPage';
+class LoginPage extends StatefulWidget {
+  static const name = 'LoginPage';
   static Route<dynamic> route() {
     return MaterialPageRoute(
-      settings: RouteSettings(name: name),
-      builder: (context) => RegisterPage(),
+      settings: RouteSettings(
+        name: name,
+      ),
+      builder: (context) => LoginPage(),
     );
   }
 
-  /// key for getting the email field in testing
   @visibleForTesting
-  static const emailTextFieldKey = Key('registerEmail');
+  static const loginPageEmailTextFormFieldKey =
+      Key('loginPageEmailTextFormField');
 
-  /// key for getting the password field in testing
   @visibleForTesting
-  static const passwordTextFieldKey = Key('registerPassword');
+  static const loginPagePasswordTextFormFieldKey =
+      Key('loginPagePasswordTextFormField');
 
-  /// key for accessing the register button in testing
   @visibleForTesting
-  static const submitButtonKey = Key('registerSubmitButton');
+  static const loginButtonKey = Key('loginButtonKey');
+
+  @visibleForTesting
+  static const openRegisterPageKey = Key('openRegisterPageKey');
 
   @override
-  _RegisterPageState createState() => _RegisterPageState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
-  /// form key for validating the form
+class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-
   final _emailController = TextEditingController();
-
   final _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('新規登録'),
+        title: Text('ログイン'),
       ),
       body: Form(
         key: _formKey,
@@ -48,43 +50,48 @@ class _RegisterPageState extends State<RegisterPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             TextFormField(
-              key: RegisterPage.emailTextFieldKey,
+              key: LoginPage.loginPageEmailTextFormFieldKey,
+              validator: Validator.emailValidator,
               controller: _emailController,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                 labelText: 'メールアドレス',
               ),
-              validator: Validator.emailValidator,
             ),
             SizedBox(height: 24),
             TextFormField(
-              key: RegisterPage.passwordTextFieldKey,
+              key: LoginPage.loginPagePasswordTextFormFieldKey,
+              validator: Validator.passwordValidator,
               controller: _passwordController,
               keyboardType: TextInputType.text,
               obscureText: true,
               decoration: InputDecoration(
                 labelText: 'パスワード',
               ),
-              validator: Validator.passwordValidator,
             ),
             SizedBox(height: 24),
             RaisedButton(
-              key: RegisterPage.submitButtonKey,
+              key: LoginPage.loginButtonKey,
               onPressed: () {
-                final isValid = _formKey.currentState.validate();
-                if (!isValid) {
+                if (!_formKey.currentState.validate()) {
                   return;
                 }
                 final email = _emailController.text;
                 final password = _passwordController.text;
-                BlocProvider.of<AuthBloc>(context).add(
-                  AuthRegistered(
-                    email: email,
-                    password: password,
-                  ),
-                );
+                BlocProvider.of<AuthBloc>(context).add(AuthLoggedin(
+                  email: email,
+                  password: password,
+                ));
               },
-              child: Text('登録する'),
+              child: Text('ログイン'),
+            ),
+            SizedBox(height: 24),
+            FlatButton(
+              key: LoginPage.openRegisterPageKey,
+              onPressed: () {
+                Navigator.of(context).push(RegisterPage.route());
+              },
+              child: Text('アカウントのない方はこちら'),
             ),
           ],
         ),

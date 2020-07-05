@@ -1,4 +1,4 @@
-import 'package:app/pages/welcome/register_page.dart';
+import 'package:app/pages/account/register_page.dart';
 import 'package:app/utilities/validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -14,7 +14,7 @@ void main() {
       );
 
       /// Press the submit button without entering anything in the text field
-      await tester.tap(find.byKey(RegisterPage.submitButtonKey));
+      await tester.tap(find.byKey(RegisterPage.registerPageSubmitButtonKey));
 
       // This will re-render the widget
       await tester.pump();
@@ -24,10 +24,11 @@ void main() {
 
       // Enter an invalid text into email field
       await tester.enterText(
-          find.byKey(RegisterPage.emailTextFieldKey), 'none email text');
+          find.byKey(RegisterPage.registerPageEmailTextFieldKey),
+          'none email text');
 
       /// Press the submit button without entering anything in the text field
-      await tester.tap(find.byKey(RegisterPage.submitButtonKey));
+      await tester.tap(find.byKey(RegisterPage.registerPageSubmitButtonKey));
 
       // This will re-render the widget
       await tester.pump();
@@ -37,10 +38,11 @@ void main() {
 
       // Enter a valid email address
       await tester.enterText(
-          find.byKey(RegisterPage.emailTextFieldKey), 'some@some.com');
+          find.byKey(RegisterPage.registerPageEmailTextFieldKey),
+          'some@some.com');
 
       /// Press the submit button without entering anything in the text field
-      await tester.tap(find.byKey(RegisterPage.submitButtonKey));
+      await tester.tap(find.byKey(RegisterPage.registerPageSubmitButtonKey));
 
       // This will re-render the widget
       await tester.pump();
@@ -58,7 +60,7 @@ void main() {
       );
 
       /// Press the submit button without entering anything in the text field
-      await tester.tap(find.byKey(RegisterPage.submitButtonKey));
+      await tester.tap(find.byKey(RegisterPage.registerPageSubmitButtonKey));
 
       // This will re-render the widget
       await tester.pump();
@@ -68,10 +70,10 @@ void main() {
 
       // Enter a password less than 6 letters
       await tester.enterText(
-          find.byKey(RegisterPage.passwordTextFieldKey), 'aaa');
+          find.byKey(RegisterPage.registerPagePasswordTextFieldKey), 'aaa');
 
       /// Press the submit button without entering anything in the text field
-      await tester.tap(find.byKey(RegisterPage.submitButtonKey));
+      await tester.tap(find.byKey(RegisterPage.registerPageSubmitButtonKey));
 
       // This will re-render the widget
       await tester.pump();
@@ -81,10 +83,11 @@ void main() {
 
       // Enter a valid password
       await tester.enterText(
-          find.byKey(RegisterPage.passwordTextFieldKey), 'validPassword');
+          find.byKey(RegisterPage.registerPagePasswordTextFieldKey),
+          'validPassword');
 
       /// Press the submit button without entering anything in the text field
-      await tester.tap(find.byKey(RegisterPage.submitButtonKey));
+      await tester.tap(find.byKey(RegisterPage.registerPageSubmitButtonKey));
 
       // This will re-render the widget
       await tester.pump();
