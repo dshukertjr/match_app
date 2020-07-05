@@ -1,15 +1,31 @@
+import 'package:app/blocs/auth/auth_bloc.dart';
+import 'package:app/pages/account/login_page.dart';
 import 'package:app/pages/account/register_page.dart';
+import 'package:app/repositories/auth_repository.dart';
 import 'package:app/utilities/validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+
+class MockAuthRepository extends Mock implements AuthRepository {}
 
 void main() {
   group('RegisterPage', () {
     testWidgets('Email Form validation messages are being shown correctly',
         (tester) async {
+      final authRepository = MockAuthRepository();
+      when(authRepository.getUid).thenAnswer((_) async => null);
+
       await tester.pumpWidget(
-        MaterialApp(
-          home: RegisterPage(),
+        BlocProvider<AuthBloc>(
+          create: (context) => AuthBloc(
+            authRepository: authRepository,
+            initialState: AuthNoUser(),
+          ),
+          child: MaterialApp(
+            home: RegisterPage(),
+          ),
         ),
       );
 
@@ -53,9 +69,18 @@ void main() {
 
     testWidgets('Password Form validation messages are being shown correctly',
         (tester) async {
+      final authRepository = MockAuthRepository();
+      when(authRepository.getUid).thenAnswer((_) async => null);
+
       await tester.pumpWidget(
-        MaterialApp(
-          home: RegisterPage(),
+        BlocProvider<AuthBloc>(
+          create: (context) => AuthBloc(
+            authRepository: authRepository,
+            initialState: AuthNoUser(),
+          ),
+          child: MaterialApp(
+            home: RegisterPage(),
+          ),
         ),
       );
 

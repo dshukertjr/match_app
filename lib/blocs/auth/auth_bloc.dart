@@ -13,9 +13,11 @@ part 'auth_state.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepository _authRepository;
 
-  AuthBloc({@required AuthRepository authRepository})
-      : _authRepository = authRepository,
-        super(AuthLoading());
+  AuthBloc({
+    @required AuthRepository authRepository,
+    @visibleForTesting AuthState initialState,
+  })  : _authRepository = authRepository,
+        super(initialState ?? AuthLoading());
 
   String uid;
 
