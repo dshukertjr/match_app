@@ -47,6 +47,11 @@ class _LoginPageState extends State<LoginPage> {
                 labelText: 'パスワード',
               ),
             ),
+            SizedBox(height: 24),
+            RaisedButton(
+              onPressed: () {},
+              child: Text('ログイン'),
+            ),
           ],
         ),
       ),

@@ -10,6 +10,11 @@ abstract class AuthProvider {
     @required String email,
     @required String password,
   });
+
+  Future<AuthResult> signInWithEmailAndPassword({
+    @required String email,
+    @required String password,
+  });
 }
 
 class AppAuthProvider extends AuthProvider {
@@ -27,6 +32,15 @@ class AppAuthProvider extends AuthProvider {
     @required String password,
   }) {
     return _auth.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+  }
+
+  @override
+  Future<AuthResult> signInWithEmailAndPassword(
+      {@required String email, @required String password}) {
+    return _auth.signInWithEmailAndPassword(
       email: email,
       password: password,
     );

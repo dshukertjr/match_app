@@ -28,5 +28,24 @@ class AuthRegistered extends AuthEvent {
   });
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [
+        email,
+        password,
+      ];
+}
+
+class AuthLoggedin extends AuthEvent {
+  final String email;
+  final String password;
+
+  AuthLoggedin({
+    @required this.email,
+    @required this.password,
+  });
+
+  @override
+  List<Object> get props => [
+        email,
+        password,
+      ];
 }

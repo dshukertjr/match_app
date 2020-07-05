@@ -12,13 +12,28 @@ class RegisterPage extends StatefulWidget {
     );
   }
 
+  /// key for getting the email field in testing
+  @visibleForTesting
+  static const emailTextFieldKey = Key('registerEmail');
+
+  /// key for getting the password field in testing
+  @visibleForTesting
+  static const passwordTextFieldKey = Key('registerPassword');
+
+  /// key for accessing the register button in testing
+  @visibleForTesting
+  static const submitButtonKey = Key('registerSubmitButton');
+
   @override
   _RegisterPageState createState() => _RegisterPageState();
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  /// form key for validating the form
   final _formKey = GlobalKey<FormState>();
+
   final _emailController = TextEditingController();
+
   final _passwordController = TextEditingController();
 
   @override
@@ -33,6 +48,7 @@ class _RegisterPageState extends State<RegisterPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             TextFormField(
+              key: RegisterPage.emailTextFieldKey,
               controller: _emailController,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
@@ -42,6 +58,7 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
             SizedBox(height: 24),
             TextFormField(
+              key: RegisterPage.passwordTextFieldKey,
               controller: _passwordController,
               keyboardType: TextInputType.text,
               obscureText: true,
@@ -52,6 +69,7 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
             SizedBox(height: 24),
             RaisedButton(
+              key: RegisterPage.submitButtonKey,
               onPressed: () {
                 final isValid = _formKey.currentState.validate();
                 if (!isValid) {
