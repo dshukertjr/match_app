@@ -1,6 +1,8 @@
 import 'package:app/blocs/auth/auth_bloc.dart';
 import 'package:app/pages/account/register_page.dart';
+import 'package:app/utilities/app_snackbar.dart';
 import 'package:app/utilities/validator.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -70,20 +72,44 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             SizedBox(height: 24),
-            RaisedButton(
-              key: LoginPage.loginButtonKey,
-              onPressed: () {
-                if (!_formKey.currentState.validate()) {
-                  return;
+            BlocConsumer<AuthBloc, AuthState>(
+              listener: (context, state) {
+                if (state.errorMessage != null) {
+                  AppSnackbar.error(
+                      context: context, message: state.errorMessage);
                 }
-                final email = _emailController.text;
-                final password = _passwordController.text;
-                BlocProvider.of<AuthBloc>(context).add(AuthLoggedin(
-                  email: email,
-                  password: password,
-                ));
               },
-              child: Text('ログイン'),
+              builder: (context, state) {
+                Widget buttonChild = SizedBox(
+                  width: 24,
+                  height: 24,
+                  child: CircularProgressIndicator(),
+                );
+                bool buttonDisabled = true;
+                if (state is AuthNoUser) {
+                  buttonChild = Text('ログイン');
+                  buttonDisabled = false;
+                }
+                return RaisedButton(
+                  key: LoginPage.loginButtonKey,
+                  onPressed: buttonDisabled
+                      ? null
+                      : () {
+                          if (!_formKey.currentState.validate()) {
+                            return;
+                          }
+                          final email = _emailController.text;
+                          final password = _passwordController.text;
+                          BlocProvider.of<AuthBloc>(context).add(
+                            AuthLoggedin(
+                              email: email,
+                              password: password,
+                            ),
+                          );
+                        },
+                  child: buttonChild,
+                );
+              },
             ),
             SizedBox(height: 24),
             FlatButton(

@@ -1,4 +1,5 @@
 import 'package:app/blocs/auth/auth_bloc.dart';
+import 'package:app/pages/account/enter_profile_page.dart';
 import 'package:app/pages/account/login_page.dart';
 import 'package:app/widgets/custom_loader.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,10 @@ class SplashPage extends StatelessWidget {
               (route) => false,
             );
           } else if (state is AuthNoProfile) {
+            Navigator.of(context).pushAndRemoveUntil(
+              EnterProfilePage.route(),
+              (route) => false,
+            );
           } else if (state is AuthSuccess) {}
         },
         child: Center(

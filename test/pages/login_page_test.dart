@@ -31,10 +31,9 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      expect(find.byKey(LoginPage.loginButtonKey), findsNothing);
+      expect(find.byType(LoginPage), findsNothing);
 
-      expect(
-          find.byKey(RegisterPage.registerPageSubmitButtonKey), findsOneWidget);
+      expect(find.byType(RegisterPage), findsOneWidget);
     });
   });
 }

@@ -49,3 +49,8 @@ class AuthLoggedin extends AuthEvent {
         password,
       ];
 }
+
+class AuthLoggedOut extends AuthEvent {
+  @override
+  List<Object> get props => [];
+}

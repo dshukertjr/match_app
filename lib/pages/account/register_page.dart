@@ -68,23 +68,41 @@ class _RegisterPageState extends State<RegisterPage> {
               validator: Validator.passwordValidator,
             ),
             SizedBox(height: 24),
-            RaisedButton(
-              key: RegisterPage.registerPageSubmitButtonKey,
-              onPressed: () {
-                final isValid = _formKey.currentState.validate();
-                if (!isValid) {
-                  return;
-                }
-                final email = _emailController.text;
-                final password = _passwordController.text;
-                BlocProvider.of<AuthBloc>(context).add(
-                  AuthRegistered(
-                    email: email,
-                    password: password,
+            BlocBuilder<AuthBloc, AuthState>(
+              builder: (context, state) {
+                Widget buttonChild = SizedBox(
+                  height: 24,
+                  width: 24,
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation(Colors.white),
                   ),
                 );
+                bool buttonDisabled = true;
+                if (state is AuthNoUser) {
+                  buttonChild = Text('登録する');
+                  buttonDisabled = false;
+                }
+                return RaisedButton(
+                  key: RegisterPage.registerPageSubmitButtonKey,
+                  onPressed: buttonDisabled
+                      ? null
+                      : () {
+                          final isValid = _formKey.currentState.validate();
+                          if (!isValid) {
+                            return;
+                          }
+                          final email = _emailController.text;
+                          final password = _passwordController.text;
+                          BlocProvider.of<AuthBloc>(context).add(
+                            AuthRegistered(
+                              email: email,
+                              password: password,
+                            ),
+                          );
+                        },
+                  child: buttonChild,
+                );
               },
-              child: Text('登録する'),
             ),
           ],
         ),
