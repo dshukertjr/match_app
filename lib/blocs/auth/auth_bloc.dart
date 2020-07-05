@@ -13,10 +13,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepository _authRepository;
 
   AuthBloc({@required AuthRepository authRepository})
-      : _authRepository = authRepository;
-
-  @override
-  AuthState get initialState => AuthInitial();
+      : _authRepository = authRepository,
+        super(AuthInitial());
 
   String uid;
 
