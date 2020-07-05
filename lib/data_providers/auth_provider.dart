@@ -15,6 +15,8 @@ abstract class AuthProvider {
     @required String email,
     @required String password,
   });
+
+  Future<void> signOut();
 }
 
 class AppAuthProvider extends AuthProvider {
@@ -44,5 +46,10 @@ class AppAuthProvider extends AuthProvider {
       email: email,
       password: password,
     );
+  }
+
+  @override
+  Future<void> signOut() {
+    return _auth.signOut();
   }
 }

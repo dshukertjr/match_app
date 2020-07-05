@@ -11,5 +11,6 @@ class Profile {
     @required this.name,
     @required this.description,
     @required this.profileImageUrl,
-  });
+  })  : assert(uid != null),
+        assert(name != null);
 }

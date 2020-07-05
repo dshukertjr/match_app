@@ -1,5 +1,6 @@
 import 'package:app/blocs/auth/auth_bloc.dart';
-import 'package:app/pages/welcome/welcome_page.dart';
+import 'package:app/pages/account/enter_profile_page.dart';
+import 'package:app/pages/account/login_page.dart';
 import 'package:app/widgets/custom_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,10 +23,14 @@ class SplashPage extends StatelessWidget {
         listener: (context, state) {
           if (state is AuthNoUser) {
             Navigator.of(context).pushAndRemoveUntil(
-              WelcomePage.route(),
+              LoginPage.route(),
               (route) => false,
             );
           } else if (state is AuthNoProfile) {
+            Navigator.of(context).pushAndRemoveUntil(
+              EnterProfilePage.route(),
+              (route) => false,
+            );
           } else if (state is AuthSuccess) {}
         },
         child: Center(

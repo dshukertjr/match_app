@@ -1,20 +1,35 @@
-import 'package:app/pages/welcome/register_page.dart';
+import 'package:app/blocs/auth/auth_bloc.dart';
+import 'package:app/pages/account/register_page.dart';
+import 'package:app/repositories/auth_repository.dart';
 import 'package:app/utilities/validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+
+class MockAuthRepository extends Mock implements AuthRepository {}
 
 void main() {
   group('RegisterPage', () {
     testWidgets('Email Form validation messages are being shown correctly',
         (tester) async {
+      final authRepository = MockAuthRepository();
+      when(authRepository.getUid).thenAnswer((_) async => null);
+
       await tester.pumpWidget(
-        MaterialApp(
-          home: RegisterPage(),
+        BlocProvider<AuthBloc>(
+          create: (context) => AuthBloc(
+            authRepository: authRepository,
+            initialState: AuthNoUser(),
+          ),
+          child: MaterialApp(
+            home: RegisterPage(),
+          ),
         ),
       );
 
       /// Press the submit button without entering anything in the text field
-      await tester.tap(find.byKey(RegisterPage.submitButtonKey));
+      await tester.tap(find.byKey(RegisterPage.registerPageSubmitButtonKey));
 
       // This will re-render the widget
       await tester.pump();
@@ -24,10 +39,11 @@ void main() {
 
       // Enter an invalid text into email field
       await tester.enterText(
-          find.byKey(RegisterPage.emailTextFieldKey), 'none email text');
+          find.byKey(RegisterPage.registerPageEmailTextFieldKey),
+          'none email text');
 
       /// Press the submit button without entering anything in the text field
-      await tester.tap(find.byKey(RegisterPage.submitButtonKey));
+      await tester.tap(find.byKey(RegisterPage.registerPageSubmitButtonKey));
 
       // This will re-render the widget
       await tester.pump();
@@ -37,10 +53,11 @@ void main() {
 
       // Enter a valid email address
       await tester.enterText(
-          find.byKey(RegisterPage.emailTextFieldKey), 'some@some.com');
+          find.byKey(RegisterPage.registerPageEmailTextFieldKey),
+          'some@some.com');
 
       /// Press the submit button without entering anything in the text field
-      await tester.tap(find.byKey(RegisterPage.submitButtonKey));
+      await tester.tap(find.byKey(RegisterPage.registerPageSubmitButtonKey));
 
       // This will re-render the widget
       await tester.pump();
@@ -51,14 +68,23 @@ void main() {
 
     testWidgets('Password Form validation messages are being shown correctly',
         (tester) async {
+      final authRepository = MockAuthRepository();
+      when(authRepository.getUid).thenAnswer((_) async => null);
+
       await tester.pumpWidget(
-        MaterialApp(
-          home: RegisterPage(),
+        BlocProvider<AuthBloc>(
+          create: (context) => AuthBloc(
+            authRepository: authRepository,
+            initialState: AuthNoUser(),
+          ),
+          child: MaterialApp(
+            home: RegisterPage(),
+          ),
         ),
       );
 
       /// Press the submit button without entering anything in the text field
-      await tester.tap(find.byKey(RegisterPage.submitButtonKey));
+      await tester.tap(find.byKey(RegisterPage.registerPageSubmitButtonKey));
 
       // This will re-render the widget
       await tester.pump();
@@ -68,10 +94,10 @@ void main() {
 
       // Enter a password less than 6 letters
       await tester.enterText(
-          find.byKey(RegisterPage.passwordTextFieldKey), 'aaa');
+          find.byKey(RegisterPage.registerPagePasswordTextFieldKey), 'aaa');
 
       /// Press the submit button without entering anything in the text field
-      await tester.tap(find.byKey(RegisterPage.submitButtonKey));
+      await tester.tap(find.byKey(RegisterPage.registerPageSubmitButtonKey));
 
       // This will re-render the widget
       await tester.pump();
@@ -81,10 +107,11 @@ void main() {
 
       // Enter a valid password
       await tester.enterText(
-          find.byKey(RegisterPage.passwordTextFieldKey), 'validPassword');
+          find.byKey(RegisterPage.registerPagePasswordTextFieldKey),
+          'validPassword');
 
       /// Press the submit button without entering anything in the text field
-      await tester.tap(find.byKey(RegisterPage.submitButtonKey));
+      await tester.tap(find.byKey(RegisterPage.registerPageSubmitButtonKey));
 
       // This will re-render the widget
       await tester.pump();
