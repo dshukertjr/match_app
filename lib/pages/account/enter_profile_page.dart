@@ -2,7 +2,7 @@ import 'package:app/blocs/auth/auth_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class EnterProfilePage extends StatelessWidget {
+class EnterProfilePage extends StatefulWidget {
   static const name = 'EnterProfilePage';
   static Route<dynamic> route() {
     return MaterialPageRoute(
@@ -11,17 +11,29 @@ class EnterProfilePage extends StatelessWidget {
   }
 
   @override
+  _EnterProfilePageState createState() => _EnterProfilePageState();
+}
+
+class _EnterProfilePageState extends State<EnterProfilePage> {
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('プロフィール登録'),
+        actions: <Widget>[
+          FlatButton(
+            onPressed: () {
+              BlocProvider.of<AuthBloc>(context).add(AuthLoggedOut());
+            },
+            child: Text('logout'),
+          ),
+        ],
       ),
-      body: Center(
-        child: RaisedButton(
-          onPressed: () {
-            BlocProvider.of<AuthBloc>(context).add(AuthLoggedOut());
-          },
-          child: Text('logout'),
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            TextFormField(),
+          ],
         ),
       ),
     );
