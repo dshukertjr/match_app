@@ -1,6 +1,4 @@
 import 'package:app/blocs/auth/auth_bloc.dart';
-import 'package:app/pages/account/enter_profile_page.dart';
-import 'package:app/pages/account/login_page.dart';
 import 'package:app/utilities/auth_navigator.dart';
 import 'package:app/widgets/custom_loader.dart';
 import 'package:flutter/material.dart';
