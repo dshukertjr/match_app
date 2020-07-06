@@ -1,6 +1,7 @@
 import 'package:app/blocs/auth/auth_bloc.dart';
 import 'package:app/pages/account/register_page.dart';
 import 'package:app/utilities/app_snackbar.dart';
+import 'package:app/utilities/auth_navigator.dart';
 import 'package:app/utilities/validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -73,6 +74,7 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(height: 24),
             BlocConsumer<AuthBloc, AuthState>(
               listener: (context, state) {
+                AuthNavigator.onAuthStateChanged(context, state);
                 if (state.errorMessage != null) {
                   AppSnackbar.error(
                       context: context, message: state.errorMessage);
@@ -82,7 +84,9 @@ class _LoginPageState extends State<LoginPage> {
                 Widget buttonChild = SizedBox(
                   width: 24,
                   height: 24,
-                  child: CircularProgressIndicator(),
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation(Colors.white),
+                  ),
                 );
                 bool buttonDisabled = true;
                 if (state is AuthNoUser) {
