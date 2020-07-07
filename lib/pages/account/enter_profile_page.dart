@@ -1,12 +1,12 @@
 import 'dart:io';
 
-import 'package:app/blocs/auth/auth_bloc.dart';
+import 'package:app/cubits/auth/auth_cubit.dart';
 import 'package:app/models/profile.dart';
 import 'package:app/utilities/validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_cubit/flutter_cubit.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -60,7 +60,7 @@ class _EnterProfilePageState extends State<EnterProfilePage> {
           if (!kReleaseMode)
             FlatButton(
               onPressed: () {
-                BlocProvider.of<AuthBloc>(context).add(AuthLoggedOut());
+                CubitProvider.of<AuthCubit>(context).logout();
               },
               child: Text('logout'),
             ),
@@ -301,14 +301,12 @@ class _EnterProfilePageState extends State<EnterProfilePage> {
           duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
     } else {
       final name = _nameController.text;
-      BlocProvider.of<AuthBloc>(context).add(
-        AuthSetProfile(
-          name: name,
-          imageFile: _profileImageFile,
-          birthDate: _birthDate,
-          sexualOrientation: _selfSexualOrientation,
-          wantSexualOrientation: _wantSexualOrientation,
-        ),
+      CubitProvider.of<AuthCubit>(context).setProfile(
+        name: name,
+        imageFile: _profileImageFile,
+        birthDate: _birthDate,
+        sexualOrientation: _selfSexualOrientation,
+        wantSexualOrientation: _wantSexualOrientation,
       );
     }
   }

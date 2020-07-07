@@ -1,9 +1,10 @@
+import 'package:app/cubits/auth/auth_cubit.dart';
 import 'package:app/data_providers/auth_provider.dart';
 import 'package:app/repositories/auth_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_cubit/flutter_cubit.dart';
 
-import 'blocs/auth/auth_bloc.dart';
 import 'pages/splash_page.dart';
 
 void main() {
@@ -23,12 +24,12 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ],
-      child: MultiBlocProvider(
+      child: MultiCubitProvider(
         providers: [
-          BlocProvider<AuthBloc>(
-            create: (context) => AuthBloc(
+          CubitProvider<AuthCubit>(
+            create: (context) => AuthCubit(
               authRepository: RepositoryProvider.of<AuthRepository>(context),
-            )..add(AuthStarted()),
+            )..initialize(),
           ),
         ],
         child: MaterialApp(

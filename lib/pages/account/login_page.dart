@@ -1,10 +1,10 @@
-import 'package:app/blocs/auth/auth_bloc.dart';
+import 'package:app/cubits/auth/auth_cubit.dart';
 import 'package:app/pages/account/register_page.dart';
 import 'package:app/utilities/app_snackbar.dart';
 import 'package:app/utilities/auth_navigator.dart';
 import 'package:app/utilities/validator.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_cubit/flutter_cubit.dart';
 
 class LoginPage extends StatefulWidget {
   static const name = 'LoginPage';
@@ -70,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             SizedBox(height: 24),
-            BlocConsumer<AuthBloc, AuthState>(
+            CubitConsumer<AuthCubit, AuthState>(
               listener: (context, state) {
                 AuthNavigator.onAuthStateChanged(context, state);
                 if (state.errorMessage != null) {
@@ -101,12 +101,8 @@ class _LoginPageState extends State<LoginPage> {
                           }
                           final email = _emailController.text;
                           final password = _passwordController.text;
-                          BlocProvider.of<AuthBloc>(context).add(
-                            AuthLoggedin(
-                              email: email,
-                              password: password,
-                            ),
-                          );
+                          CubitProvider.of<AuthCubit>(context)
+                              .login(email: email, password: password);
                         },
                   child: buttonChild,
                 );

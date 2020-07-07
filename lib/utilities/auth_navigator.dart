@@ -1,4 +1,4 @@
-import 'package:app/blocs/auth/auth_bloc.dart';
+import 'package:app/cubits/auth/auth_cubit.dart';
 import 'package:app/pages/account/enter_profile_page.dart';
 import 'package:app/pages/account/login_page.dart';
 import 'package:app/pages/tab_page.dart';
