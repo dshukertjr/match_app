@@ -24,12 +24,56 @@ void main() {
         ),
       );
 
-      await tester
-          .tap(find.byKey(EnterProfilePage.enterProfilePageSubmitButtonKey));
+      await tester.tap(find.byKey(EnterProfilePage.pageSubmitButtonKey));
 
       await tester.pump();
 
       expect(find.text(Validator.requiredMessage), findsWidgets);
+    });
+
+    testWidgets('page controller works as expected', (tester) async {
+      await tester.pumpWidget(
+        BlocProvider<AuthBloc>(
+          create: (context) => AuthBloc(
+            authRepository: MockAuthRepository(),
+            initialState: AuthNoUser(),
+          ),
+          child: MaterialApp(
+            home: EnterProfilePage(),
+          ),
+        ),
+      );
+
+      // enter name, birthdate and press next
+      await tester.enterText(
+          find.byKey(EnterProfilePage.nameTextFieldKey), 'aaa');
+
+      await tester.tap(find.byKey(EnterProfilePage.birthDateTextFieldKey));
+
+      await tester.pumpAndSettle();
+
+      // await tester.tap(find.byType(CupertinoButton));
+      await tester.tap(find.text('完了'));
+
+      await tester.pump();
+
+      await tester.tap(find.byKey(EnterProfilePage.pageSubmitButtonKey));
+
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(EnterProfilePage.pageSexualOrientationKey),
+          findsOneWidget);
+
+      // choose sexual orientation and press next
+
+      await tester.tap(find.byKey(EnterProfilePage.pageSexualOrientationKey));
+
+      await tester.tap(find.byKey(EnterProfilePage.pageSubmitButtonKey));
+
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(EnterProfilePage.pageWantSexualOrientationKey),
+          findsOneWidget);
     });
   });
 }

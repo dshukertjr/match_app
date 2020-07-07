@@ -50,6 +50,31 @@ class AuthLoggedin extends AuthEvent {
       ];
 }
 
+class AuthSetProfile extends AuthEvent {
+  final String name;
+  final File imageFile;
+  final DateTime birthDate;
+  final String sexualOrientation;
+  final String wantSexualOrientation;
+
+  AuthSetProfile({
+    @required this.name,
+    @required this.imageFile,
+    @required this.birthDate,
+    @required this.sexualOrientation,
+    @required this.wantSexualOrientation,
+  });
+
+  @override
+  List<Object> get props => [
+        name,
+        imageFile,
+        birthDate,
+        sexualOrientation,
+        wantSexualOrientation,
+      ];
+}
+
 class AuthLoggedOut extends AuthEvent {
   @override
   List<Object> get props => [];
