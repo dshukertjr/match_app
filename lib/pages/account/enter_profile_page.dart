@@ -4,6 +4,7 @@ import 'package:app/blocs/auth/auth_bloc.dart';
 import 'package:app/models/profile.dart';
 import 'package:app/utilities/validator.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -19,16 +20,21 @@ class EnterProfilePage extends StatefulWidget {
   }
 
   @visibleForTesting
-  static const enterProfileNameTextFieldKey =
-      Key('enterProfileNameTextFieldKey');
+  static const nameTextFieldKey = Key('enterProfileNameTextFieldKey');
 
   @visibleForTesting
-  static const enterProfileBirthDateTextFieldKey =
-      Key('enterProfileBirthDateTextFieldKey');
+  static const birthDateTextFieldKey = Key('enterProfileBirthDateTextFieldKey');
 
   @visibleForTesting
-  static const enterProfilePageSubmitButtonKey =
-      Key('enterProfilePageSubmitButtonKey');
+  static const pageSubmitButtonKey = Key('enterProfilePageSubmitButtonKey');
+
+  @visibleForTesting
+  static const pageSexualOrientationKey =
+      Key('enterProfilePageSexualOrientationKey');
+
+  @visibleForTesting
+  static const pageWantSexualOrientationKey =
+      Key('enterProfilePageWantSexualOrientationKey');
 
   @override
   _EnterProfilePageState createState() => _EnterProfilePageState();
@@ -40,7 +46,8 @@ class _EnterProfilePageState extends State<EnterProfilePage> {
   final _birthDateController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   File _profileImageFile;
-  SexualOrientation _sexualOrientation = SexualOrientation.blank();
+  String _selfSexualOrientation;
+  String _wantSexualOrientation;
   PageController _pageController = PageController();
 
   @override
@@ -49,12 +56,13 @@ class _EnterProfilePageState extends State<EnterProfilePage> {
       appBar: AppBar(
         title: Text('プロフィール登録'),
         actions: <Widget>[
-          FlatButton(
-            onPressed: () {
-              BlocProvider.of<AuthBloc>(context).add(AuthLoggedOut());
-            },
-            child: Text('logout'),
-          ),
+          if (!kReleaseMode)
+            FlatButton(
+              onPressed: () {
+                BlocProvider.of<AuthBloc>(context).add(AuthLoggedOut());
+              },
+              child: Text('logout'),
+            ),
         ],
       ),
       body: _body(context),
@@ -65,14 +73,8 @@ class _EnterProfilePageState extends State<EnterProfilePage> {
 
   RaisedButton _fab() {
     return RaisedButton(
-      key: EnterProfilePage.enterProfilePageSubmitButtonKey,
-      onPressed: () {
-        if (!_formKey.currentState.validate()) {
-          return;
-        }
-        _pageController.nextPage(
-            duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
-      },
+      key: EnterProfilePage.pageSubmitButtonKey,
+      onPressed: _submit,
       child: Text('次へ'),
     );
   }
@@ -83,6 +85,7 @@ class _EnterProfilePageState extends State<EnterProfilePage> {
       children: <Widget>[
         _page1(),
         _page2(context),
+        _page3(context),
       ],
     );
   }
@@ -92,17 +95,116 @@ class _EnterProfilePageState extends State<EnterProfilePage> {
       children: <Widget>[
         Text('あなたについて教えてください', style: Theme.of(context).textTheme.headline4),
         Text('＊プロフィール上に表示されます'),
-        Row(
-          children: <Widget>[
-            Checkbox(
-              value: _sexualOrientation.maleG,
-              onChanged: (val) {
-                setState(() {
-                  _sexualOrientation = _sexualOrientation.copyWith(maleG: val);
-                });
-              },
-            ),
-          ],
+        RadioListTile<String>(
+          key: EnterProfilePage.pageSexualOrientationKey,
+          groupValue: _selfSexualOrientation,
+          value: SexualOrientation.gay,
+          onChanged: (val) {
+            setState(() {
+              _selfSexualOrientation = val;
+            });
+          },
+          title: Text('ゲイ'),
+        ),
+        RadioListTile<String>(
+          groupValue: _selfSexualOrientation,
+          value: SexualOrientation.lesbian,
+          onChanged: (val) {
+            setState(() {
+              _selfSexualOrientation = val;
+            });
+          },
+          title: Text('レズビアン'),
+        ),
+        RadioListTile<String>(
+          groupValue: _selfSexualOrientation,
+          value: SexualOrientation.bisexual,
+          onChanged: (val) {
+            setState(() {
+              _selfSexualOrientation = val;
+            });
+          },
+          title: Text('バイセクシュアル'),
+        ),
+        RadioListTile<String>(
+          groupValue: _selfSexualOrientation,
+          value: SexualOrientation.transgender,
+          onChanged: (val) {
+            setState(() {
+              _selfSexualOrientation = val;
+            });
+          },
+          title: Text('トランスジェンダー'),
+        ),
+        RadioListTile<String>(
+          groupValue: _selfSexualOrientation,
+          value: SexualOrientation.hide,
+          onChanged: (val) {
+            setState(() {
+              _selfSexualOrientation = val;
+            });
+          },
+          title: Text('答えない'),
+        ),
+      ],
+    );
+  }
+
+  Widget _page3(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        Text('閲覧する/される相手を選択してください',
+            style: Theme.of(context).textTheme.headline4),
+        RadioListTile<String>(
+          key: EnterProfilePage.pageWantSexualOrientationKey,
+          groupValue: _wantSexualOrientation,
+          value: SexualOrientation.gay,
+          onChanged: (val) {
+            setState(() {
+              _wantSexualOrientation = val;
+            });
+          },
+          title: Text('ゲイ'),
+        ),
+        RadioListTile<String>(
+          groupValue: _wantSexualOrientation,
+          value: SexualOrientation.lesbian,
+          onChanged: (val) {
+            setState(() {
+              _wantSexualOrientation = val;
+            });
+          },
+          title: Text('レズビアン'),
+        ),
+        RadioListTile<String>(
+          groupValue: _wantSexualOrientation,
+          value: SexualOrientation.bisexual,
+          onChanged: (val) {
+            setState(() {
+              _wantSexualOrientation = val;
+            });
+          },
+          title: Text('バイセクシュアル'),
+        ),
+        RadioListTile<String>(
+          groupValue: _wantSexualOrientation,
+          value: SexualOrientation.transgender,
+          onChanged: (val) {
+            setState(() {
+              _wantSexualOrientation = val;
+            });
+          },
+          title: Text('トランスジェンダー'),
+        ),
+        RadioListTile<String>(
+          groupValue: _wantSexualOrientation,
+          value: SexualOrientation.hide,
+          onChanged: (val) {
+            setState(() {
+              _wantSexualOrientation = val;
+            });
+          },
+          title: Text('答えない'),
         ),
       ],
     );
@@ -151,7 +253,7 @@ class _EnterProfilePageState extends State<EnterProfilePage> {
             ),
             SizedBox(height: 24),
             TextFormField(
-              key: EnterProfilePage.enterProfileNameTextFieldKey,
+              key: EnterProfilePage.nameTextFieldKey,
               controller: _nameController,
               decoration: InputDecoration(
                 labelText: 'ニックネーム',
@@ -160,7 +262,7 @@ class _EnterProfilePageState extends State<EnterProfilePage> {
             ),
             SizedBox(height: 24),
             TextFormField(
-              key: EnterProfilePage.enterProfileBirthDateTextFieldKey,
+              key: EnterProfilePage.birthDateTextFieldKey,
               readOnly: true,
               onTap: _chooseBirthDate,
               controller: _birthDateController,
@@ -182,6 +284,32 @@ class _EnterProfilePageState extends State<EnterProfilePage> {
     _birthDateController.dispose();
     _pageController.dispose();
     super.dispose();
+  }
+
+  void _submit() {
+    final page = _pageController.page.round();
+    if (page == 0 && !_formKey.currentState.validate()) {
+      return;
+    } else if (page == 1 && _selfSexualOrientation == null) {
+      return;
+    } else if (page == 2 && _wantSexualOrientation == null) {
+      return;
+    }
+    if (page < 2) {
+      _pageController.nextPage(
+          duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
+    } else {
+      final name = _nameController.text;
+      BlocProvider.of<AuthBloc>(context).add(
+        AuthSetProfile(
+          name: name,
+          imageFile: _profileImageFile,
+          birthDate: _birthDate,
+          sexualOrientation: _selfSexualOrientation,
+          wantSexualOrientation: _wantSexualOrientation,
+        ),
+      );
+    }
   }
 
   void _chooseBirthDate() async {

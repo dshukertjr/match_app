@@ -1,55 +1,11 @@
 import 'package:flutter/foundation.dart';
 
 class SexualOrientation {
-  final bool maleG;
-  final bool maleB;
-  final bool maleT;
-  final bool femaleL;
-  final bool femaleB;
-  final bool femaleT;
-  final bool hide;
-
-  SexualOrientation({
-    @required this.maleG,
-    @required this.maleB,
-    @required this.maleT,
-    @required this.femaleL,
-    @required this.femaleB,
-    @required this.femaleT,
-    @required this.hide,
-  });
-
-  static SexualOrientation blank() {
-    return SexualOrientation(
-      maleG: false,
-      maleB: false,
-      maleT: false,
-      femaleL: false,
-      femaleB: false,
-      femaleT: false,
-      hide: false,
-    );
-  }
-
-  SexualOrientation copyWith({
-    bool maleG,
-    bool maleB,
-    bool maleT,
-    bool femaleL,
-    bool femaleB,
-    bool femaleT,
-    bool hide,
-  }) {
-    return SexualOrientation(
-      maleG: maleG ?? this.maleG,
-      maleB: maleB ?? this.maleB,
-      maleT: maleT ?? this.maleT,
-      femaleL: femaleL ?? this.femaleL,
-      femaleB: femaleB ?? this.femaleB,
-      femaleT: femaleT ?? this.femaleT,
-      hide: hide ?? this.hide,
-    );
-  }
+  static const gay = 'gay';
+  static const lesbian = 'lesbian';
+  static const bisexual = 'bisexual';
+  static const transgender = 'transgender';
+  static const hide = 'hide';
 }
 
 class Profile {
