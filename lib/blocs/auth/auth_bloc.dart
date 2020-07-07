@@ -63,7 +63,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     yield AuthLoading();
     try {
       await _authRepository.register(email: email, password: password);
-      // TODO change destination depending on status
       yield AuthNoProfile();
     } on PlatformException catch (e) {
       switch (e.code) {

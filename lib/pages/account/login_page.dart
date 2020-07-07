@@ -10,9 +10,7 @@ class LoginPage extends StatefulWidget {
   static const name = 'LoginPage';
   static Route<dynamic> route() {
     return MaterialPageRoute(
-      settings: RouteSettings(
-        name: name,
-      ),
+      settings: RouteSettings(name: name),
       builder: (context) => LoginPage(),
     );
   }

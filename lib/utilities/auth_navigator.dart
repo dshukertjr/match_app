@@ -1,6 +1,7 @@
 import 'package:app/blocs/auth/auth_bloc.dart';
 import 'package:app/pages/account/enter_profile_page.dart';
 import 'package:app/pages/account/login_page.dart';
+import 'package:app/pages/tab_page.dart';
 import 'package:flutter/material.dart';
 
 /// Class that will navigate user depending on the auth state
@@ -18,6 +19,11 @@ class AuthNavigator {
         EnterProfilePage.route(),
         (route) => false,
       );
-    } else if (state is AuthSuccess) {}
+    } else if (state is AuthSuccess) {
+      Navigator.of(context).pushAndRemoveUntil(
+        TabPage.route(),
+        (route) => false,
+      );
+    }
   };
 }

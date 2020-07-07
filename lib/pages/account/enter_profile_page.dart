@@ -15,6 +15,7 @@ class EnterProfilePage extends StatefulWidget {
   static const name = 'EnterProfilePage';
   static Route<dynamic> route() {
     return MaterialPageRoute(
+      settings: RouteSettings(name: name),
       builder: (context) => EnterProfilePage(),
     );
   }
