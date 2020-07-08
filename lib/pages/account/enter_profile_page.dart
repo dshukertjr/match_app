@@ -301,7 +301,7 @@ class _EnterProfilePageState extends State<EnterProfilePage> {
           duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
     } else {
       final name = _nameController.text;
-      CubitProvider.of<AuthCubit>(context).setProfile(
+      CubitProvider.of<AuthCubit>(context).saveProfile(
         name: name,
         imageFile: _profileImageFile,
         birthDate: _birthDate,
