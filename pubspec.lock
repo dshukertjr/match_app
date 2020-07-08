@@ -43,13 +43,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.0.0"
-  bloc_test:
-    dependency: "direct dev"
-    description:
-      name: bloc_test
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "6.0.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -128,12 +121,12 @@ packages:
     source: hosted
     version: "0.1.2"
   cubit_test:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: cubit_test
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.0"
+    version: "0.1.1"
   equatable:
     dependency: "direct main"
     description:
