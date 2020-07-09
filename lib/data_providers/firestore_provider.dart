@@ -5,6 +5,8 @@ import 'package:flutter/foundation.dart';
 class FirestoreProvider {
   final _firestore = Firestore.instance;
 
+  static const _userPrivatesCollection = 'userPrivates';
+
   Future<void> saveProfile({
     @required String uid,
     @required UserPrivate userPrivate,
@@ -13,11 +15,11 @@ class FirestoreProvider {
     assert(userPrivate != null);
     assert(uid == userPrivate.uid);
     return _firestore
-        .document('userPrivates/$uid')
+        .document('$_userPrivatesCollection/$uid')
         .setData(userPrivate.toMap(), merge: true);
   }
 
   Stream<DocumentSnapshot> userPrivateStream(String uid) {
-    return _firestore.document('userPrivate/$uid').snapshots();
+    return _firestore.document('$_userPrivatesCollection/$uid').snapshots();
   }
 }
