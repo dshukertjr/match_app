@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
 class SexualOrientation {
@@ -20,13 +21,28 @@ class UserPrivate {
   UserPrivate({
     @required this.uid,
     @required this.name,
-     this.description,
+    this.description,
     @required this.profileImageUrl,
     @required this.birthDate,
     @required this.sexualOrientation,
     @required this.wantSexualOrientation,
   })  : assert(uid != null),
         assert(name != null);
+
+  static UserPrivate fromSnap(DocumentSnapshot snap) {
+    if (!snap.exists) {
+      return null;
+    }
+    return UserPrivate(
+      uid: snap.data['uid'],
+      name: snap.data['name'],
+      description: snap.data['description'],
+      profileImageUrl: snap.data['profileImageUrl'],
+      birthDate: snap.data['birthDate'].toDate(),
+      sexualOrientation: snap.data['sexualOrientation'],
+      wantSexualOrientation: snap.data['wantSexualOrientation'],
+    );
+  }
 
   Map<String, dynamic> toMap() {
     return {
@@ -41,7 +57,7 @@ class UserPrivate {
         'date': birthDate.day,
       },
       'sexualOrientation': sexualOrientation,
-      'wantSexualOrientation':
+      'wantSexualOrientation': wantSexualOrientation,
     }..removeWhere((key, value) => value == null);
   }
 }

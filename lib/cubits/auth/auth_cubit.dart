@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:io';
 
+import 'package:app/models/profile.dart';
 import 'package:app/repositories/auth_repository.dart';
 import 'package:cubit/cubit.dart';
 import 'package:equatable/equatable.dart';
@@ -16,14 +18,31 @@ class AuthCubit extends Cubit<AuthState> {
   })  : _authRepository = authRepository,
         super(initialState ?? AuthLoading());
 
-  String uid;
+  String _uid;
+  StreamSubscription<UserPrivate> _userPrivateSubscription;
+  UserPrivate _userPrivate;
+
+  @override
+  Future<void> close() {
+    _userPrivateSubscription?.cancel();
+    return super.close();
+  }
 
   void initialize() async {
-    uid = await _authRepository.getUid;
-    if (uid == null) {
+    _uid = await _authRepository.getUid;
+    if (_uid == null) {
       emit(AuthNoUser());
     } else {
-      emit(AuthNoProfile());
+      _userPrivateSubscription?.cancel();
+      _userPrivateSubscription =
+          _authRepository.userPrivateStream(_uid).listen((userPrivate) {
+        _userPrivate = userPrivate;
+        if (_userPrivate == null) {
+          emit(AuthNoProfile(uid: _uid));
+        } else {
+          emit(AuthSuccess(uid: _uid, userPrivate: _userPrivate));
+        }
+      });
     }
   }
 
@@ -33,8 +52,18 @@ class AuthCubit extends Cubit<AuthState> {
   }) async {
     emit(AuthLoading());
     try {
-      await _authRepository.register(email: email, password: password);
-      emit(AuthNoProfile());
+      _userPrivateSubscription?.cancel();
+      _userPrivateSubscription =
+          _authRepository.userPrivateStream(_uid).listen((userPrivate) {
+        _userPrivate = userPrivate;
+        if (_userPrivate == null) {
+          emit(AuthNoProfile(uid: _uid));
+        } else {
+          emit(AuthSuccess(uid: _uid, userPrivate: _userPrivate));
+        }
+      });
+      _uid = await _authRepository.register(email: email, password: password);
+      emit(AuthNoProfile(uid: _uid));
     } on PlatformException catch (e) {
       switch (e.code) {
         case 'ERROR_WEAK_PASSWORD':
@@ -50,7 +79,7 @@ class AuthCubit extends Cubit<AuthState> {
           emit(AuthNoUser(errorMessage: '不明なエラーが発生しました'));
       }
     } catch (e) {
-      debugPrint(e);
+      debugPrint(e.toString());
       emit(AuthNoUser(errorMessage: '不明なエラーが発生しました'));
     }
   }
@@ -61,12 +90,20 @@ class AuthCubit extends Cubit<AuthState> {
   }) async {
     emit(AuthLoading());
     try {
-      await _authRepository.signInWithEmailAndPassword(
+      _userPrivateSubscription?.cancel();
+      _userPrivateSubscription =
+          _authRepository.userPrivateStream(_uid).listen((userPrivate) {
+        _userPrivate = userPrivate;
+        if (_userPrivate == null) {
+          emit(AuthNoProfile(uid: _uid));
+        } else {
+          emit(AuthSuccess(uid: _uid, userPrivate: _userPrivate));
+        }
+      });
+      _uid = await _authRepository.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-      // TODO change destination depending on status
-      emit(AuthNoProfile());
     } on PlatformException catch (e) {
       switch (e.code) {
         case 'ERROR_INVALID_EMAIL':
@@ -104,6 +141,7 @@ class AuthCubit extends Cubit<AuthState> {
     @required String sexualOrientation,
     @required String wantSexualOrientation,
   }) async {
+    emit(AuthLoading());
     await _authRepository.saveProfile(
       name: name,
       imageFile: imageFile,
@@ -114,7 +152,9 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   void logout() async {
+    emit(AuthLoading());
     await _authRepository.signOut();
+    _userPrivateSubscription?.cancel();
     emit(AuthNoUser());
   }
 }

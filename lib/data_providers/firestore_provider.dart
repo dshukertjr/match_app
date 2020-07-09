@@ -3,16 +3,21 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
 class FirestoreProvider {
-  final Firestore _firestore;
-
-  FirestoreProvider(this._firestore);
+  final _firestore = Firestore.instance;
 
   Future<void> saveProfile({
     @required String uid,
-    @required UserPrivate profile,
+    @required UserPrivate userPrivate,
   }) {
+    assert(uid != null);
+    assert(userPrivate != null);
+    assert(uid == userPrivate.uid);
     return _firestore
         .document('userPrivates/$uid')
-        .setData(profile.toMap(), merge: true);
+        .setData(userPrivate.toMap(), merge: true);
+  }
+
+  Stream<DocumentSnapshot> userPrivateStream(String uid) {
+    return _firestore.document('userPrivate/$uid').snapshots();
   }
 }

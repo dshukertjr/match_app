@@ -20,7 +20,11 @@ class AuthNoUser extends AuthState {
 
 /// FirebaseUser exists, but profile has not been entered yet
 class AuthNoProfile extends AuthState {
-  AuthNoProfile({String errorMessage}) : super(errorMessage: errorMessage);
+  final String uid;
+  AuthNoProfile({
+    @required this.uid,
+    String errorMessage,
+  }) : super(errorMessage: errorMessage);
 
   @override
   List<Object> get props => [];
@@ -28,7 +32,13 @@ class AuthNoProfile extends AuthState {
 
 /// FirebaseUser and profile both exits
 class AuthSuccess extends AuthState {
-  AuthSuccess({String errorMessage}) : super(errorMessage: errorMessage);
+  final String uid;
+  final UserPrivate userPrivate;
+  AuthSuccess({
+    @required this.uid,
+    @required this.userPrivate,
+    errorMessage,
+  }) : super(errorMessage: errorMessage);
 
   @override
   List<Object> get props => [];

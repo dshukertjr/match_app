@@ -1,16 +1,27 @@
 import 'package:app/cubits/auth/auth_cubit.dart';
+import 'package:app/data_providers/firestore_provider.dart';
 import 'package:app/repositories/auth_repository.dart';
 import 'package:cubit_test/cubit_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 
-class MockAuthRepository extends Mock implements AuthRepository {}
+class MockFirestoreProvider extends Mock implements FirestoreProvider {}
+
+class MockAuthRepository extends Mock implements AuthRepository {
+  final FirestoreProvider _firestoreProvider;
+
+  MockAuthRepository({FirestoreProvider firestoreProvider})
+      : _firestoreProvider = firestoreProvider;
+}
 
 void main() {
   AuthCubit authCubit;
   group('AuthCubit not initially logged in', () {
     setUp(() {
-      final authRepository = MockAuthRepository();
+      final firestoreProvider = MockFirestoreProvider();
+
+      final authRepository =
+          MockAuthRepository(firestoreProvider: firestoreProvider);
 
       when(authRepository.getUid).thenAnswer((_) async => null);
       when(authRepository.register(email: '', password: ''))
@@ -29,7 +40,7 @@ void main() {
       'after registering, AuthNoProfile is emitted',
       build: () async => authCubit,
       act: (cubit) async => cubit.register(email: '', password: ''),
-      expect: [AuthNoProfile()],
+      expect: [AuthLoading()],
     );
   });
 
