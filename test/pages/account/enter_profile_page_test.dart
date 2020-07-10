@@ -1,9 +1,9 @@
-import 'package:app/blocs/auth/auth_bloc.dart';
+import 'package:app/cubits/auth/auth_cubit.dart';
 import 'package:app/pages/account/enter_profile_page.dart';
 import 'package:app/repositories/auth_repository.dart';
 import 'package:app/utilities/validator.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_cubit/flutter_cubit.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 
@@ -11,12 +11,12 @@ class MockAuthRepository extends Mock implements AuthRepository {}
 
 void main() {
   group('EnterProfilePage', () {
-    testWidgets('Validations are working', (tester) async {
+    testWidgets('Validations are working', (WidgetTester tester) async {
       await tester.pumpWidget(
-        BlocProvider<AuthBloc>(
-          create: (context) => AuthBloc(
+        CubitProvider<AuthCubit>(
+          create: (_) => AuthCubit(
             authRepository: MockAuthRepository(),
-            initialState: AuthNoUser(),
+            initialState: const AuthNoUser(),
           ),
           child: MaterialApp(
             home: EnterProfilePage(),
@@ -28,15 +28,16 @@ void main() {
 
       await tester.pump();
 
-      expect(find.text(Validator.requiredMessage), findsWidgets);
+      expect(find.text(requiredMessage), findsWidgets);
     });
 
-    testWidgets('page controller works as expected', (tester) async {
+    testWidgets('page controller works as expected',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
-        BlocProvider<AuthBloc>(
-          create: (context) => AuthBloc(
+        CubitProvider<AuthCubit>(
+          create: (_) => AuthCubit(
             authRepository: MockAuthRepository(),
-            initialState: AuthNoUser(),
+            initialState: const AuthNoUser(),
           ),
           child: MaterialApp(
             home: EnterProfilePage(),

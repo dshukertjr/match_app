@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 class HideOnKeyboard extends StatefulWidget {
-  final Widget _child;
-
   const HideOnKeyboard({Key key, Widget child})
       : _child = child,
         super(key: key);
+
+  final Widget _child;
+
   @override
   _HideOnKeyboardState createState() => _HideOnKeyboardState();
 }

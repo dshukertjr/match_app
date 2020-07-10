@@ -1,26 +1,26 @@
-import 'package:app/blocs/auth/auth_bloc.dart';
+import 'package:app/cubits/auth/auth_cubit.dart';
 import 'package:app/utilities/auth_navigator.dart';
 import 'package:app/widgets/custom_loader.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_cubit/flutter_cubit.dart';
 
 class SplashPage extends StatelessWidget {
-  static const name = 'SplashPage';
+  static const String name = 'SplashPage';
   static Route<dynamic> route() {
-    return MaterialPageRoute(
-      settings: RouteSettings(
+    return MaterialPageRoute<dynamic>(
+      settings: const RouteSettings(
         name: name,
       ),
-      builder: (context) => SplashPage(),
+      builder: (_) => SplashPage(),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocListener<AuthBloc, AuthState>(
-        listener: (context, state) {
-          AuthNavigator.onAuthStateChanged(context, state);
+      body: CubitListener<AuthCubit, AuthState>(
+        listener: (BuildContext context, AuthState state) {
+          navigateOnAuthStateChanged(context, state);
         },
         child: Center(
           child: CustomLoader(),

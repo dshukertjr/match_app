@@ -1,57 +1,75 @@
+import 'dart:io';
+
 import 'package:app/data_providers/auth_provider.dart';
+import 'package:app/data_providers/firestore_provider.dart';
+import 'package:app/data_providers/storage_provider.dart';
+import 'package:app/models/profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
-abstract class AuthRepository {
-  final AuthProvider _authProvider;
-
-  AuthRepository({
+class AuthRepository {
+  const AuthRepository({
     @required AuthProvider authProvider,
-  }) : _authProvider = authProvider;
+    @required FirestoreProvider firestoreProvider,
+    @required StorageProvider storageProvider,
+  })  : _authProvider = authProvider,
+        _firestoreProvider = firestoreProvider,
+        _storageProvider = storageProvider;
 
-  Stream<FirebaseUser> get onAuthStateChanged;
+  final AuthProvider _authProvider;
+  final FirestoreProvider _firestoreProvider;
+  final StorageProvider _storageProvider;
 
-  Future<String> get getUid;
-
-  Future<String> register({@required String email, @required String password});
-
-  Future<String> signInWithEmailAndPassword(
-      {@required String email, @required String password});
-
-  Future<void> signOut();
-}
-
-class AppAuthRepository extends AuthRepository {
-  AppAuthRepository({@required AuthProvider authProvider})
-      : super(authProvider: authProvider);
-
-  @override
   Stream<FirebaseUser> get onAuthStateChanged =>
       _authProvider.onAuthStateChanged;
 
-  @override
   Future<String> get getUid async => (await _authProvider.currentUser)?.uid;
 
-  @override
+  /// returns uid
   Future<String> register(
       {@required String email, @required String password}) async {
-    final result = await _authProvider.createUserWithEmailAndPassword(
+    final AuthResult result =
+        await _authProvider.createUserWithEmailAndPassword(
       email: email,
       password: password,
     );
     return result.user.uid;
   }
 
-  @override
+  /// return uid
   Future<String> signInWithEmailAndPassword(
       {@required String email, @required String password}) async {
-    final result = await _authProvider.signInWithEmailAndPassword(
+    final AuthResult result = await _authProvider.signInWithEmailAndPassword(
         email: email, password: password);
     return result.user.uid;
   }
 
-  @override
   Future<void> signOut() {
     return _authProvider.signOut();
+  }
+
+  Future<void> saveProfile({
+    @required String name,
+    @required File imageFile,
+    @required DateTime birthDate,
+    @required String sexualOrientation,
+    @required String wantSexualOrientation,
+  }) async {
+    final String uid = await getUid;
+    final String imageUrl = await _storageProvider.uploadFile(
+        path: 'profileImages/$uid/image.jpg', file: imageFile);
+    final UserPrivate userPrivate = UserPrivate(
+      uid: uid,
+      name: name,
+      birthDate: birthDate,
+      profileImageUrl: imageUrl,
+      sexualOrientation: sexualOrientation,
+      wantSexualOrientation: wantSexualOrientation,
+    );
+    return _firestoreProvider.saveProfile(uid: uid, userPrivate: userPrivate);
+  }
+
+  Stream<UserPrivate> userPrivateStream(String uid) {
+    return _firestoreProvider.userPrivateStream(uid).map(UserPrivate.fromSnap);
   }
 }

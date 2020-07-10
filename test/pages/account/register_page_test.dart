@@ -1,9 +1,9 @@
-import 'package:app/blocs/auth/auth_bloc.dart';
+import 'package:app/cubits/auth/auth_cubit.dart';
 import 'package:app/pages/account/register_page.dart';
 import 'package:app/repositories/auth_repository.dart';
 import 'package:app/utilities/validator.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_cubit/flutter_cubit.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 
@@ -12,15 +12,15 @@ class MockAuthRepository extends Mock implements AuthRepository {}
 void main() {
   group('RegisterPage', () {
     testWidgets('Email Form validation messages are being shown correctly',
-        (tester) async {
-      final authRepository = MockAuthRepository();
+        (WidgetTester tester) async {
+      final MockAuthRepository authRepository = MockAuthRepository();
       when(authRepository.getUid).thenAnswer((_) async => null);
 
       await tester.pumpWidget(
-        BlocProvider<AuthBloc>(
-          create: (context) => AuthBloc(
+        CubitProvider<AuthCubit>(
+          create: (_) => AuthCubit(
             authRepository: authRepository,
-            initialState: AuthNoUser(),
+            initialState: const AuthNoUser(),
           ),
           child: MaterialApp(
             home: RegisterPage(),
@@ -35,7 +35,7 @@ void main() {
       await tester.pump();
 
       // Required field will display error message
-      expect(find.text(Validator.requiredMessage), findsWidgets);
+      expect(find.text(requiredMessage), findsWidgets);
 
       // Enter an invalid text into email field
       await tester.enterText(
@@ -49,7 +49,7 @@ void main() {
       await tester.pump();
 
       // Email is invalid, so invalid email error message should be shown
-      expect(find.text(Validator.invalidEmailMessage), findsOneWidget);
+      expect(find.text(invalidEmailMessage), findsOneWidget);
 
       // Enter a valid email address
       await tester.enterText(
@@ -63,19 +63,19 @@ void main() {
       await tester.pump();
 
       // Email is valid, so no invalid error should be found
-      expect(find.text(Validator.invalidEmailMessage), findsNothing);
+      expect(find.text(invalidEmailMessage), findsNothing);
     });
 
     testWidgets('Password Form validation messages are being shown correctly',
-        (tester) async {
-      final authRepository = MockAuthRepository();
+        (WidgetTester tester) async {
+      final MockAuthRepository authRepository = MockAuthRepository();
       when(authRepository.getUid).thenAnswer((_) async => null);
 
       await tester.pumpWidget(
-        BlocProvider<AuthBloc>(
-          create: (context) => AuthBloc(
+        CubitProvider<AuthCubit>(
+          create: (_) => AuthCubit(
             authRepository: authRepository,
-            initialState: AuthNoUser(),
+            initialState: const AuthNoUser(),
           ),
           child: MaterialApp(
             home: RegisterPage(),
@@ -90,7 +90,7 @@ void main() {
       await tester.pump();
 
       // Required field will display error message
-      expect(find.text(Validator.requiredMessage), findsWidgets);
+      expect(find.text(requiredMessage), findsWidgets);
 
       // Enter a password less than 6 letters
       await tester.enterText(
@@ -103,7 +103,7 @@ void main() {
       await tester.pump();
 
       // Email is invalid, so invalid email error message should be shown
-      expect(find.text(Validator.invalidPasswordMessage), findsOneWidget);
+      expect(find.text(invalidPasswordMessage), findsOneWidget);
 
       // Enter a valid password
       await tester.enterText(
@@ -117,7 +117,7 @@ void main() {
       await tester.pump();
 
       // Email is valid, so no invalid error should be found
-      expect(find.text(Validator.invalidPasswordMessage), findsNothing);
+      expect(find.text(invalidPasswordMessage), findsNothing);
     });
   });
 }

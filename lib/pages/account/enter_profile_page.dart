@@ -1,39 +1,41 @@
 import 'dart:io';
 
-import 'package:app/blocs/auth/auth_bloc.dart';
+import 'package:app/cubits/auth/auth_cubit.dart';
 import 'package:app/models/profile.dart';
 import 'package:app/utilities/validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_cubit/flutter_cubit.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 class EnterProfilePage extends StatefulWidget {
-  static const name = 'EnterProfilePage';
+  static const String name = 'EnterProfilePage';
   static Route<dynamic> route() {
-    return MaterialPageRoute(
-      builder: (context) => EnterProfilePage(),
+    return MaterialPageRoute<dynamic>(
+      settings: const RouteSettings(name: name),
+      builder: (_) => EnterProfilePage(),
     );
   }
 
   @visibleForTesting
-  static const nameTextFieldKey = Key('enterProfileNameTextFieldKey');
+  static const Key nameTextFieldKey = Key('enterProfileNameTextFieldKey');
 
   @visibleForTesting
-  static const birthDateTextFieldKey = Key('enterProfileBirthDateTextFieldKey');
+  static const Key birthDateTextFieldKey =
+      Key('enterProfileBirthDateTextFieldKey');
 
   @visibleForTesting
-  static const pageSubmitButtonKey = Key('enterProfilePageSubmitButtonKey');
+  static const Key pageSubmitButtonKey = Key('enterProfilePageSubmitButtonKey');
 
   @visibleForTesting
-  static const pageSexualOrientationKey =
+  static const Key pageSexualOrientationKey =
       Key('enterProfilePageSexualOrientationKey');
 
   @visibleForTesting
-  static const pageWantSexualOrientationKey =
+  static const Key pageWantSexualOrientationKey =
       Key('enterProfilePageWantSexualOrientationKey');
 
   @override
@@ -41,27 +43,27 @@ class EnterProfilePage extends StatefulWidget {
 }
 
 class _EnterProfilePageState extends State<EnterProfilePage> {
-  final _nameController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
   DateTime _birthDate;
-  final _birthDateController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _birthDateController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   File _profileImageFile;
   String _selfSexualOrientation;
   String _wantSexualOrientation;
-  PageController _pageController = PageController();
+  final PageController _pageController = PageController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('プロフィール登録'),
+        title: const Text('プロフィール登録'),
         actions: <Widget>[
           if (!kReleaseMode)
             FlatButton(
               onPressed: () {
-                BlocProvider.of<AuthBloc>(context).add(AuthLoggedOut());
+                CubitProvider.of<AuthCubit>(context).logout();
               },
-              child: Text('logout'),
+              child: const Text('logout'),
             ),
         ],
       ),
@@ -75,7 +77,7 @@ class _EnterProfilePageState extends State<EnterProfilePage> {
     return RaisedButton(
       key: EnterProfilePage.pageSubmitButtonKey,
       onPressed: _submit,
-      child: Text('次へ'),
+      child: const Text('次へ'),
     );
   }
 
@@ -94,57 +96,57 @@ class _EnterProfilePageState extends State<EnterProfilePage> {
     return Column(
       children: <Widget>[
         Text('あなたについて教えてください', style: Theme.of(context).textTheme.headline4),
-        Text('＊プロフィール上に表示されます'),
+        const Text('＊プロフィール上に表示されます'),
         RadioListTile<String>(
           key: EnterProfilePage.pageSexualOrientationKey,
           groupValue: _selfSexualOrientation,
           value: SexualOrientation.gay,
-          onChanged: (val) {
+          onChanged: (String val) {
             setState(() {
               _selfSexualOrientation = val;
             });
           },
-          title: Text('ゲイ'),
+          title: const Text('ゲイ'),
         ),
         RadioListTile<String>(
           groupValue: _selfSexualOrientation,
           value: SexualOrientation.lesbian,
-          onChanged: (val) {
+          onChanged: (String val) {
             setState(() {
               _selfSexualOrientation = val;
             });
           },
-          title: Text('レズビアン'),
+          title: const Text('レズビアン'),
         ),
         RadioListTile<String>(
           groupValue: _selfSexualOrientation,
           value: SexualOrientation.bisexual,
-          onChanged: (val) {
+          onChanged: (String val) {
             setState(() {
               _selfSexualOrientation = val;
             });
           },
-          title: Text('バイセクシュアル'),
+          title: const Text('バイセクシュアル'),
         ),
         RadioListTile<String>(
           groupValue: _selfSexualOrientation,
           value: SexualOrientation.transgender,
-          onChanged: (val) {
+          onChanged: (String val) {
             setState(() {
               _selfSexualOrientation = val;
             });
           },
-          title: Text('トランスジェンダー'),
+          title: const Text('トランスジェンダー'),
         ),
         RadioListTile<String>(
           groupValue: _selfSexualOrientation,
           value: SexualOrientation.hide,
-          onChanged: (val) {
+          onChanged: (String val) {
             setState(() {
               _selfSexualOrientation = val;
             });
           },
-          title: Text('答えない'),
+          title: const Text('答えない'),
         ),
       ],
     );
@@ -159,52 +161,52 @@ class _EnterProfilePageState extends State<EnterProfilePage> {
           key: EnterProfilePage.pageWantSexualOrientationKey,
           groupValue: _wantSexualOrientation,
           value: SexualOrientation.gay,
-          onChanged: (val) {
+          onChanged: (String val) {
             setState(() {
               _wantSexualOrientation = val;
             });
           },
-          title: Text('ゲイ'),
+          title: const Text('ゲイ'),
         ),
         RadioListTile<String>(
           groupValue: _wantSexualOrientation,
           value: SexualOrientation.lesbian,
-          onChanged: (val) {
+          onChanged: (String val) {
             setState(() {
               _wantSexualOrientation = val;
             });
           },
-          title: Text('レズビアン'),
+          title: const Text('レズビアン'),
         ),
         RadioListTile<String>(
           groupValue: _wantSexualOrientation,
           value: SexualOrientation.bisexual,
-          onChanged: (val) {
+          onChanged: (String val) {
             setState(() {
               _wantSexualOrientation = val;
             });
           },
-          title: Text('バイセクシュアル'),
+          title: const Text('バイセクシュアル'),
         ),
         RadioListTile<String>(
           groupValue: _wantSexualOrientation,
           value: SexualOrientation.transgender,
-          onChanged: (val) {
+          onChanged: (String val) {
             setState(() {
               _wantSexualOrientation = val;
             });
           },
-          title: Text('トランスジェンダー'),
+          title: const Text('トランスジェンダー'),
         ),
         RadioListTile<String>(
           groupValue: _wantSexualOrientation,
           value: SexualOrientation.hide,
-          onChanged: (val) {
+          onChanged: (String val) {
             setState(() {
               _wantSexualOrientation = val;
             });
           },
-          title: Text('答えない'),
+          title: const Text('答えない'),
         ),
       ],
     );
@@ -220,7 +222,7 @@ class _EnterProfilePageState extends State<EnterProfilePage> {
             Center(
               child: Material(
                 clipBehavior: Clip.antiAliasWithSaveLayer,
-                shape: CircleBorder(),
+                shape: const CircleBorder(),
                 child: InkWell(
                   onTap: _pickProfileImage,
                   child: SizedBox(
@@ -251,27 +253,27 @@ class _EnterProfilePageState extends State<EnterProfilePage> {
                 ),
               ),
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
             TextFormField(
               key: EnterProfilePage.nameTextFieldKey,
               controller: _nameController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'ニックネーム',
               ),
-              validator: Validator.requiredValidator,
+              validator: requiredValidator,
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
             TextFormField(
               key: EnterProfilePage.birthDateTextFieldKey,
               readOnly: true,
               onTap: _chooseBirthDate,
               controller: _birthDateController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: '生年月日',
               ),
-              validator: Validator.requiredValidator,
+              validator: requiredValidator,
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
           ],
         ),
       ),
@@ -287,7 +289,7 @@ class _EnterProfilePageState extends State<EnterProfilePage> {
   }
 
   void _submit() {
-    final page = _pageController.page.round();
+    final int page = _pageController.page.round();
     if (page == 0 && !_formKey.currentState.validate()) {
       return;
     } else if (page == 1 && _selfSexualOrientation == null) {
@@ -297,25 +299,23 @@ class _EnterProfilePageState extends State<EnterProfilePage> {
     }
     if (page < 2) {
       _pageController.nextPage(
-          duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
+          duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
     } else {
-      final name = _nameController.text;
-      BlocProvider.of<AuthBloc>(context).add(
-        AuthSetProfile(
-          name: name,
-          imageFile: _profileImageFile,
-          birthDate: _birthDate,
-          sexualOrientation: _selfSexualOrientation,
-          wantSexualOrientation: _wantSexualOrientation,
-        ),
+      final String name = _nameController.text;
+      CubitProvider.of<AuthCubit>(context).saveProfile(
+        name: name,
+        imageFile: _profileImageFile,
+        birthDate: _birthDate,
+        sexualOrientation: _selfSexualOrientation,
+        wantSexualOrientation: _wantSexualOrientation,
       );
     }
   }
 
-  void _chooseBirthDate() async {
-    final now = DateTime.now();
-    final eiteenYearsAgo = DateTime(now.year - 18, now.month, now.day);
-    final birthDate = await DatePicker.showDatePicker(
+  Future<void> _chooseBirthDate() async {
+    final DateTime now = DateTime.now();
+    final DateTime eiteenYearsAgo = DateTime(now.year - 18, now.month, now.day);
+    final DateTime birthDate = await DatePicker.showDatePicker(
       context,
       showTitleActions: true,
       minTime: DateTime(1900, 1, 1),
@@ -332,8 +332,8 @@ class _EnterProfilePageState extends State<EnterProfilePage> {
     }
   }
 
-  void _pickProfileImage() async {
-    final selectedImageFile = await ImagePicker().getImage(
+  Future<void> _pickProfileImage() async {
+    final PickedFile selectedImageFile = await ImagePicker().getImage(
       source: ImageSource.gallery,
       maxHeight: 500,
       maxWidth: 500,

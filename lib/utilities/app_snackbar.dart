@@ -2,31 +2,31 @@ import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 
 class AppSnackbar {
-  static regular({
+  static void regular({
     @required BuildContext context,
     @required String message,
   }) {
     {
       assert(context != null);
       assert(message != null);
-      Flushbar(
+      Flushbar<void>(
         message: message,
-        duration: Duration(seconds: 4),
-      )..show(context);
+        duration: const Duration(seconds: 4),
+      ).show(context);
     }
   }
 
-  static error({
+  static void error({
     @required BuildContext context,
     @required String message,
   }) {
     {
       assert(context != null);
       assert(message != null);
-      Flushbar(
+      Flushbar<void>(
         message: message,
-        duration: Duration(seconds: 4),
-      )..show(context);
+        duration: const Duration(seconds: 4),
+      ).show(context);
     }
   }
 }
