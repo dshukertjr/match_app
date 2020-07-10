@@ -34,8 +34,10 @@ void main() {
       'after registering, AuthNoProfile is emitted',
       build: () async => authCubit,
       act: (AuthCubit cubit) async => cubit.register(email: '', password: ''),
+      skip: 0,
       expect: <AuthState>[
         const AuthLoading(),
+        const AuthNoProfile(uid: 'aaa'),
       ],
     );
   });

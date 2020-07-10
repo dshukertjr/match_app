@@ -57,7 +57,7 @@ class AuthCubit extends Cubit<AuthState> {
       _userPrivateSubscription?.cancel();
       _userPrivateSubscription = _authRepository
           .userPrivateStream(_uid)
-          .listen((UserPrivate userPrivate) {
+          ?.listen((UserPrivate userPrivate) {
         _userPrivate = userPrivate;
         if (_userPrivate == null) {
           emit(AuthNoProfile(uid: _uid));
