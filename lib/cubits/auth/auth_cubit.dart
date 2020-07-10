@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:app/models/profile.dart';
+import 'package:app/models/user_private.dart';
 import 'package:app/repositories/auth_repository.dart';
 import 'package:cubit/cubit.dart';
 import 'package:equatable/equatable.dart';

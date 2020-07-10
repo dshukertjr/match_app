@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:app/cubits/auth/auth_cubit.dart';
-import 'package:app/models/profile.dart';
+import 'package:app/models/user_private.dart';
 import 'package:app/utilities/validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';

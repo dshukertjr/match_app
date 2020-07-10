@@ -1,4 +1,4 @@
-import 'package:app/models/profile.dart';
+import 'package:app/models/user_private.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 

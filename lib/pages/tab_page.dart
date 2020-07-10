@@ -1,4 +1,4 @@
-import 'package:app/pages/tabs/home_page.dart';
+import 'package:app/pages/tabs/search_page.dart';
 import 'package:app/widgets/bottom_tab_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -27,7 +27,7 @@ class _TabPageState extends State<TabPage> {
             child: IndexedStack(
               index: _tabIndex,
               children: <Widget>[
-                HomePage(),
+                SearchTab(),
               ],
             ),
           ),

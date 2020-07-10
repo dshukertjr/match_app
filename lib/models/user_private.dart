@@ -14,7 +14,7 @@ class UserPrivate {
     @required this.uid,
     @required this.name,
     this.description,
-    @required this.profileImageUrl,
+    @required this.imageUrls,
     @required this.birthDate,
     @required this.sexualOrientation,
     @required this.wantSexualOrientation,
@@ -24,7 +24,7 @@ class UserPrivate {
   final String uid;
   final String name;
   final String description;
-  final String profileImageUrl;
+  final List<String> imageUrls;
   final DateTime birthDate;
   final String sexualOrientation;
   final String wantSexualOrientation;
@@ -37,7 +37,7 @@ class UserPrivate {
       uid: snap.data['uid'] as String,
       name: snap.data['name'] as String,
       description: snap.data['description'] as String,
-      profileImageUrl: snap.data['profileImageUrl'] as String,
+      imageUrls: List<String>.from(snap.data['imageUrls'] as List<dynamic>),
       birthDate: snap.data['birthDate'].toDate() as DateTime,
       sexualOrientation: snap.data['sexualOrientation'] as String,
       wantSexualOrientation: snap.data['wantSexualOrientation'] as String,
@@ -49,7 +49,7 @@ class UserPrivate {
       'uid': uid,
       'name': name,
       'description': description,
-      'profileImageUrl': profileImageUrl,
+      'profileImageUrl': imageUrls,
       'birthDate': birthDate,
       'birth': <String, int>{
         'year': birthDate.year,
