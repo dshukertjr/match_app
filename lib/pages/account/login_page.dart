@@ -7,42 +7,42 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cubit/flutter_cubit.dart';
 
 class LoginPage extends StatefulWidget {
-  static const name = 'LoginPage';
+  static const String name = 'LoginPage';
   static Route<dynamic> route() {
-    return MaterialPageRoute(
-      settings: RouteSettings(name: name),
-      builder: (context) => LoginPage(),
+    return MaterialPageRoute<dynamic>(
+      settings: const RouteSettings(name: name),
+      builder: (_) => LoginPage(),
     );
   }
 
   @visibleForTesting
-  static const loginPageEmailTextFormFieldKey =
+  static const Key loginPageEmailTextFormFieldKey =
       Key('loginPageEmailTextFormField');
 
   @visibleForTesting
-  static const loginPagePasswordTextFormFieldKey =
+  static const Key loginPagePasswordTextFormFieldKey =
       Key('loginPagePasswordTextFormField');
 
   @visibleForTesting
-  static const loginButtonKey = Key('loginButtonKey');
+  static const Key loginButtonKey = Key('loginButtonKey');
 
   @visibleForTesting
-  static const openRegisterPageKey = Key('openRegisterPageKey');
+  static const Key openRegisterPageKey = Key('openRegisterPageKey');
 
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('ログイン'),
+        title: const Text('ログイン'),
       ),
       body: Form(
         key: _formKey,
@@ -51,44 +51,44 @@ class _LoginPageState extends State<LoginPage> {
           children: <Widget>[
             TextFormField(
               key: LoginPage.loginPageEmailTextFormFieldKey,
-              validator: Validator.emailValidator,
+              validator: emailValidator,
               controller: _emailController,
               keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'メールアドレス',
               ),
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
             TextFormField(
               key: LoginPage.loginPagePasswordTextFormFieldKey,
-              validator: Validator.passwordValidator,
+              validator: passwordValidator,
               controller: _passwordController,
               keyboardType: TextInputType.text,
               obscureText: true,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'パスワード',
               ),
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
             CubitConsumer<AuthCubit, AuthState>(
-              listener: (context, state) {
-                AuthNavigator.onAuthStateChanged(context, state);
+              listener: (BuildContext context, AuthState state) {
+                navigateOnAuthStateChanged(context, state);
                 if (state.errorMessage != null) {
                   AppSnackbar.error(
                       context: context, message: state.errorMessage);
                 }
               },
-              builder: (context, state) {
-                Widget buttonChild = SizedBox(
+              builder: (BuildContext context, AuthState state) {
+                Widget buttonChild = const SizedBox(
                   width: 24,
                   height: 24,
                   child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation(Colors.white),
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                   ),
                 );
                 bool buttonDisabled = true;
                 if (state is AuthNoUser) {
-                  buttonChild = Text('ログイン');
+                  buttonChild = const Text('ログイン');
                   buttonDisabled = false;
                 }
                 return RaisedButton(
@@ -99,8 +99,8 @@ class _LoginPageState extends State<LoginPage> {
                           if (!_formKey.currentState.validate()) {
                             return;
                           }
-                          final email = _emailController.text;
-                          final password = _passwordController.text;
+                          final String email = _emailController.text;
+                          final String password = _passwordController.text;
                           CubitProvider.of<AuthCubit>(context)
                               .login(email: email, password: password);
                         },
@@ -108,13 +108,13 @@ class _LoginPageState extends State<LoginPage> {
                 );
               },
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
             FlatButton(
               key: LoginPage.openRegisterPageKey,
               onPressed: () {
-                Navigator.of(context).push(RegisterPage.route());
+                Navigator.of(context).push<dynamic>(RegisterPage.route());
               },
-              child: Text('アカウントのない方はこちら'),
+              child: const Text('アカウントのない方はこちら'),
             ),
           ],
         ),

@@ -8,17 +8,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
 class AuthRepository {
-  final AuthProvider _authProvider;
-  final FirestoreProvider _firestoreProvider;
-  final StorageProvider _storageProvider;
-
-  AuthRepository({
+  const AuthRepository({
     @required AuthProvider authProvider,
     @required FirestoreProvider firestoreProvider,
     @required StorageProvider storageProvider,
   })  : _authProvider = authProvider,
         _firestoreProvider = firestoreProvider,
         _storageProvider = storageProvider;
+
+  final AuthProvider _authProvider;
+  final FirestoreProvider _firestoreProvider;
+  final StorageProvider _storageProvider;
 
   Stream<FirebaseUser> get onAuthStateChanged =>
       _authProvider.onAuthStateChanged;
@@ -28,7 +28,8 @@ class AuthRepository {
   /// returns uid
   Future<String> register(
       {@required String email, @required String password}) async {
-    final result = await _authProvider.createUserWithEmailAndPassword(
+    final AuthResult result =
+        await _authProvider.createUserWithEmailAndPassword(
       email: email,
       password: password,
     );
@@ -38,7 +39,7 @@ class AuthRepository {
   /// return uid
   Future<String> signInWithEmailAndPassword(
       {@required String email, @required String password}) async {
-    final result = await _authProvider.signInWithEmailAndPassword(
+    final AuthResult result = await _authProvider.signInWithEmailAndPassword(
         email: email, password: password);
     return result.user.uid;
   }
@@ -54,10 +55,10 @@ class AuthRepository {
     @required String sexualOrientation,
     @required String wantSexualOrientation,
   }) async {
-    final uid = await getUid;
-    final imageUrl = await _storageProvider.uploadFile(
+    final String uid = await getUid;
+    final String imageUrl = await _storageProvider.uploadFile(
         path: 'profileImages/$uid/image.jpg', file: imageFile);
-    final profile = UserPrivate(
+    final UserPrivate userPrivate = UserPrivate(
       uid: uid,
       name: name,
       birthDate: birthDate,
@@ -65,7 +66,7 @@ class AuthRepository {
       sexualOrientation: sexualOrientation,
       wantSexualOrientation: wantSexualOrientation,
     );
-    return _firestoreProvider.saveProfile(uid: uid, userPrivate: profile);
+    return _firestoreProvider.saveProfile(uid: uid, userPrivate: userPrivate);
   }
 
   Stream<UserPrivate> userPrivateStream(String uid) {

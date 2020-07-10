@@ -7,11 +7,14 @@ void main() {
     // First, define the Finders and use them to locate widgets from the
     // test suite. Note: the Strings provided to the `byValueKey` method must
     // be the same as the Strings we used for the Keys in step 1.
-    final welcomeRegisterButtonFinder =
+    final SerializableFinder welcomeRegisterButtonFinder =
         find.byValueKey('welcomeRegisterButton');
-    final emailTextFieldFinder = find.byValueKey('registerEmail');
-    final passwordTextFieldFinder = find.byValueKey('registerPassword');
-    final submitButtonFinder = find.byValueKey('registerSubmitButton');
+    final SerializableFinder emailTextFieldFinder =
+        find.byValueKey('registerEmail');
+    final SerializableFinder passwordTextFieldFinder =
+        find.byValueKey('registerPassword');
+    final SerializableFinder submitButtonFinder =
+        find.byValueKey('registerSubmitButton');
 
     FlutterDriver driver;
 
@@ -30,7 +33,7 @@ void main() {
     test('start out without error text', () async {
       await driver.waitFor(welcomeRegisterButtonFinder);
 
-      await Future.delayed(Duration(seconds: 1));
+      await Future<void>.delayed(const Duration(seconds: 1));
 
       await driver.tap(welcomeRegisterButtonFinder);
 

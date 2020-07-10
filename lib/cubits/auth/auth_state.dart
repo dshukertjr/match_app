@@ -1,45 +1,63 @@
 part of 'auth_cubit.dart';
 
 abstract class AuthState extends Equatable {
+  const AuthState({this.errorMessage});
+
   final String errorMessage;
-  AuthState({this.errorMessage});
 }
 
 class AuthLoading extends AuthState {
-  @override
-  List<Object> get props => [];
-}
-
-/// FirebaseUser does not exist
-class AuthNoUser extends AuthState {
-  AuthNoUser({String errorMessage}) : super(errorMessage: errorMessage);
-
-  @override
-  List<Object> get props => [];
-}
-
-/// FirebaseUser exists, but profile has not been entered yet
-class AuthNoProfile extends AuthState {
-  final String uid;
-  AuthNoProfile({
-    @required this.uid,
+  const AuthLoading({
     String errorMessage,
   }) : super(errorMessage: errorMessage);
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => <Object>[errorMessage];
+}
+
+/// FirebaseUser does not exist
+class AuthNoUser extends AuthState {
+  const AuthNoUser({
+    String errorMessage,
+  }) : super(errorMessage: errorMessage);
+
+  @override
+  List<Object> get props => <Object>[
+        errorMessage,
+      ];
+}
+
+/// FirebaseUser exists, but profile has not been entered yet
+class AuthNoProfile extends AuthState {
+  const AuthNoProfile({
+    @required this.uid,
+    String errorMessage,
+  }) : super(errorMessage: errorMessage);
+
+  final String uid;
+
+  @override
+  List<Object> get props => <Object>[
+        uid,
+        errorMessage,
+      ];
 }
 
 /// FirebaseUser and profile both exits
 class AuthSuccess extends AuthState {
-  final String uid;
-  final UserPrivate userPrivate;
-  AuthSuccess({
+  const AuthSuccess({
     @required this.uid,
     @required this.userPrivate,
-    errorMessage,
+    String errorMessage,
   }) : super(errorMessage: errorMessage);
 
+  final String uid;
+  final UserPrivate userPrivate;
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => <Object>[
+        uid,
+        userPrivate,
+        errorMessage,
+      ];
 }

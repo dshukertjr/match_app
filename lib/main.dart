@@ -17,13 +17,13 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final _authProvider = AuthProvider();
-    final _firestoreProvider = FirestoreProvider();
-    final _storageProvider = StorageProvider();
+    final AuthProvider _authProvider = AuthProvider();
+    final FirestoreProvider _firestoreProvider = FirestoreProvider();
+    final StorageProvider _storageProvider = StorageProvider();
     return MultiRepositoryProvider(
-      providers: [
+      providers: <RepositoryProvider<Object>>[
         RepositoryProvider<AuthRepository>(
-          create: (context) => AuthRepository(
+          create: (_) => AuthRepository(
             authProvider: _authProvider,
             firestoreProvider: _firestoreProvider,
             storageProvider: _storageProvider,
@@ -31,19 +31,21 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MultiCubitProvider(
-        providers: [
+        // ignore: always_specify_types
+        providers: <CubitProvider>[
           CubitProvider<AuthCubit>(
-            create: (context) => AuthCubit(
+            create: (BuildContext context) => AuthCubit(
               authRepository: RepositoryProvider.of<AuthRepository>(context),
             )..initialize(),
           ),
         ],
         child: MaterialApp(
+          debugShowCheckedModeBanner: false,
           title: 'LGBT Match',
           theme: ThemeData(
             primarySwatch: Colors.blue,
             visualDensity: VisualDensity.adaptivePlatformDensity,
-            inputDecorationTheme: InputDecorationTheme(
+            inputDecorationTheme: const InputDecorationTheme(
               border: OutlineInputBorder(),
             ),
           ),

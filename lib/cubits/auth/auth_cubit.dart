@@ -11,12 +11,13 @@ import 'package:flutter/services.dart';
 part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
-  final AuthRepository _authRepository;
   AuthCubit({
     @required AuthRepository authRepository,
     AuthState initialState,
   })  : _authRepository = authRepository,
-        super(initialState ?? AuthLoading());
+        super(initialState ?? const AuthLoading());
+
+  final AuthRepository _authRepository;
 
   String _uid;
   StreamSubscription<UserPrivate> _userPrivateSubscription;
@@ -28,14 +29,15 @@ class AuthCubit extends Cubit<AuthState> {
     return super.close();
   }
 
-  void initialize() async {
+  Future<void> initialize() async {
     _uid = await _authRepository.getUid;
     if (_uid == null) {
-      emit(AuthNoUser());
+      emit(const AuthNoUser());
     } else {
       _userPrivateSubscription?.cancel();
-      _userPrivateSubscription =
-          _authRepository.userPrivateStream(_uid).listen((userPrivate) {
+      _userPrivateSubscription = _authRepository
+          .userPrivateStream(_uid)
+          .listen((UserPrivate userPrivate) {
         _userPrivate = userPrivate;
         if (_userPrivate == null) {
           emit(AuthNoProfile(uid: _uid));
@@ -46,15 +48,16 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  void register({
+  Future<void> register({
     @required String email,
     @required String password,
   }) async {
-    emit(AuthLoading());
+    emit(const AuthLoading());
     try {
       _userPrivateSubscription?.cancel();
-      _userPrivateSubscription =
-          _authRepository.userPrivateStream(_uid).listen((userPrivate) {
+      _userPrivateSubscription = _authRepository
+          .userPrivateStream(_uid)
+          .listen((UserPrivate userPrivate) {
         _userPrivate = userPrivate;
         if (_userPrivate == null) {
           emit(AuthNoProfile(uid: _uid));
@@ -67,32 +70,33 @@ class AuthCubit extends Cubit<AuthState> {
     } on PlatformException catch (e) {
       switch (e.code) {
         case 'ERROR_WEAK_PASSWORD':
-          emit(AuthNoUser(errorMessage: 'パスワードをより複雑なものにしてください'));
+          emit(const AuthNoUser(errorMessage: 'パスワードをより複雑なものにしてください'));
           break;
         case 'ERROR_INVALID_EMAIL':
-          emit(AuthNoUser(errorMessage: '不正なメールアドレスです'));
+          emit(const AuthNoUser(errorMessage: '不正なメールアドレスです'));
           break;
         case 'ERROR_EMAIL_ALREADY_IN_USE':
-          emit(AuthNoUser(errorMessage: 'このメールアドレスは既に使われています'));
+          emit(const AuthNoUser(errorMessage: 'このメールアドレスは既に使われています'));
           break;
         default:
-          emit(AuthNoUser(errorMessage: '不明なエラーが発生しました'));
+          emit(const AuthNoUser(errorMessage: '不明なエラーが発生しました'));
       }
     } catch (e) {
       debugPrint(e.toString());
-      emit(AuthNoUser(errorMessage: '不明なエラーが発生しました'));
+      emit(const AuthNoUser(errorMessage: '不明なエラーが発生しました'));
     }
   }
 
-  void login({
+  Future<void> login({
     @required String email,
     @required String password,
   }) async {
-    emit(AuthLoading());
+    emit(const AuthLoading());
     try {
       _userPrivateSubscription?.cancel();
-      _userPrivateSubscription =
-          _authRepository.userPrivateStream(_uid).listen((userPrivate) {
+      _userPrivateSubscription = _authRepository
+          .userPrivateStream(_uid)
+          .listen((UserPrivate userPrivate) {
         _userPrivate = userPrivate;
         if (_userPrivate == null) {
           emit(AuthNoProfile(uid: _uid));
@@ -107,30 +111,30 @@ class AuthCubit extends Cubit<AuthState> {
     } on PlatformException catch (e) {
       switch (e.code) {
         case 'ERROR_INVALID_EMAIL':
-          emit(AuthNoUser(errorMessage: '不正なメールアドレスです'));
+          emit(const AuthNoUser(errorMessage: '不正なメールアドレスです'));
           break;
         case 'ERROR_WRONG_PASSWORD':
-          emit(AuthNoUser(errorMessage: 'パスワードが間違っています'));
+          emit(const AuthNoUser(errorMessage: 'パスワードが間違っています'));
           break;
         case 'ERROR_USER_NOT_FOUND':
-          emit(AuthNoUser(errorMessage: 'ユーザーが見つかりませんでした'));
+          emit(const AuthNoUser(errorMessage: 'ユーザーが見つかりませんでした'));
           break;
         case 'ERROR_USER_DISABLED':
-          emit(AuthNoUser(errorMessage: 'このユーザーはアカウントを停止されています'));
+          emit(const AuthNoUser(errorMessage: 'このユーザーはアカウントを停止されています'));
           break;
         case 'ERROR_TOO_MANY_REQUESTS':
-          emit(AuthNoUser(errorMessage: '時間を置いてからお試しください'));
+          emit(const AuthNoUser(errorMessage: '時間を置いてからお試しください'));
           break;
         case 'ERROR_OPERATION_NOT_ALLOWED':
-          emit(AuthNoUser(errorMessage: 'メールアドレスとパスワードのログインが許可されていません'));
+          emit(const AuthNoUser(errorMessage: 'メールアドレスとパスワードのログインが許可されていません'));
           break;
         default:
-          emit(AuthNoUser(errorMessage: '不明なエラーが発生しました'));
+          emit(const AuthNoUser(errorMessage: '不明なエラーが発生しました'));
       }
       debugPrint(e.code);
     } catch (e) {
-      emit(AuthNoUser(errorMessage: '不明なエラーが発生しました'));
-      debugPrint(e);
+      emit(const AuthNoUser(errorMessage: '不明なエラーが発生しました'));
+      debugPrint(e.toString());
     }
   }
 
@@ -141,7 +145,7 @@ class AuthCubit extends Cubit<AuthState> {
     @required String sexualOrientation,
     @required String wantSexualOrientation,
   }) async {
-    emit(AuthLoading());
+    emit(const AuthLoading());
     await _authRepository.saveProfile(
       name: name,
       imageFile: imageFile,
@@ -151,10 +155,10 @@ class AuthCubit extends Cubit<AuthState> {
     );
   }
 
-  void logout() async {
-    emit(AuthLoading());
+  Future<void> logout() async {
+    emit(const AuthLoading());
     await _authRepository.signOut();
     _userPrivateSubscription?.cancel();
-    emit(AuthNoUser());
+    emit(const AuthNoUser());
   }
 }

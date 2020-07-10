@@ -4,26 +4,23 @@ import 'package:app/pages/account/login_page.dart';
 import 'package:app/pages/tab_page.dart';
 import 'package:flutter/material.dart';
 
-/// Class that will navigate user depending on the auth state
-class AuthNavigator {
-  /// Navigate users to the correct page depending on the auth state
-  static void Function(BuildContext, AuthState) onAuthStateChanged =
-      (context, state) {
-    if (state is AuthNoUser) {
-      Navigator.of(context).pushAndRemoveUntil(
-        LoginPage.route(),
-        (route) => false,
-      );
-    } else if (state is AuthNoProfile) {
-      Navigator.of(context).pushAndRemoveUntil(
-        EnterProfilePage.route(),
-        (route) => false,
-      );
-    } else if (state is AuthSuccess) {
-      Navigator.of(context).pushAndRemoveUntil(
-        TabPage.route(),
-        (route) => false,
-      );
-    }
-  };
-}
+/// Navigate users to the correct page depending on the auth state
+void Function(BuildContext, AuthState) navigateOnAuthStateChanged =
+    (BuildContext context, AuthState state) {
+  if (state is AuthNoUser) {
+    Navigator.of(context).pushAndRemoveUntil<void>(
+      LoginPage.route(),
+      (_) => false,
+    );
+  } else if (state is AuthNoProfile) {
+    Navigator.of(context).pushAndRemoveUntil<void>(
+      EnterProfilePage.route(),
+      (_) => false,
+    );
+  } else if (state is AuthSuccess) {
+    Navigator.of(context).pushAndRemoveUntil<void>(
+      TabPage.route(),
+      (_) => false,
+    );
+  }
+};

@@ -12,12 +12,12 @@ class MockAuthRepository extends Mock implements AuthRepository {}
 
 void main() {
   group('LoginPage', () {
-    testWidgets('Validations are working', (tester) async {
+    testWidgets('Validations are working', (WidgetTester tester) async {
       await tester.pumpWidget(
         CubitProvider<AuthCubit>(
-          create: (context) => AuthCubit(
+          create: (_) => AuthCubit(
             authRepository: MockAuthRepository(),
-            initialState: AuthNoUser(),
+            initialState: const AuthNoUser(),
           ),
           child: MaterialApp(
             home: LoginPage(),
@@ -29,15 +29,16 @@ void main() {
 
       await tester.pump();
 
-      expect(find.text(Validator.requiredMessage), findsWidgets);
+      expect(find.text(requiredMessage), findsWidgets);
     });
 
-    testWidgets('Register page can be opened from login page', (tester) async {
+    testWidgets('Register page can be opened from login page',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         CubitProvider<AuthCubit>(
-          create: (context) => AuthCubit(
+          create: (_) => AuthCubit(
             authRepository: MockAuthRepository(),
-            initialState: AuthNoUser(),
+            initialState: const AuthNoUser(),
           ),
           child: MaterialApp(
             home: LoginPage(),

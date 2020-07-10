@@ -3,9 +3,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
 class FirestoreProvider {
-  final _firestore = Firestore.instance;
+  final Firestore _firestore = Firestore.instance;
 
-  static const _userPrivatesCollection = 'userPrivates';
+  static const String _userPrivatesCollection = 'userPrivates';
 
   Future<void> saveProfile({
     @required String uid,

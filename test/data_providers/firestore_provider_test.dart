@@ -8,9 +8,9 @@ class MockFirestoreProvider extends Mock implements FirestoreProvider {}
 void main() {
   group('FirestoreProvider', () {
     test('uid and userPrivate.uid have to match', () {
-      final firestoreProvider = MockFirestoreProvider();
+      final MockFirestoreProvider firestoreProvider = MockFirestoreProvider();
 
-      final userPrivate = UserPrivate(
+      final UserPrivate userPrivate = UserPrivate(
         uid: 'aaa',
         name: 'name',
         sexualOrientation: SexualOrientation.gay,

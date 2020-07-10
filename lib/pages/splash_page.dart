@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cubit/flutter_cubit.dart';
 
 class SplashPage extends StatelessWidget {
-  static const name = 'SplashPage';
+  static const String name = 'SplashPage';
   static Route<dynamic> route() {
-    return MaterialPageRoute(
-      settings: RouteSettings(
+    return MaterialPageRoute<dynamic>(
+      settings: const RouteSettings(
         name: name,
       ),
-      builder: (context) => SplashPage(),
+      builder: (_) => SplashPage(),
     );
   }
 
@@ -19,8 +19,8 @@ class SplashPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: CubitListener<AuthCubit, AuthState>(
-        listener: (context, state) {
-          AuthNavigator.onAuthStateChanged(context, state);
+        listener: (BuildContext context, AuthState state) {
+          navigateOnAuthStateChanged(context, state);
         },
         child: Center(
           child: CustomLoader(),

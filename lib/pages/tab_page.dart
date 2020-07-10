@@ -3,11 +3,11 @@ import 'package:app/widgets/bottom_tab_bar.dart';
 import 'package:flutter/material.dart';
 
 class TabPage extends StatefulWidget {
-  static const name = 'TabPage';
+  static const String name = 'TabPage';
   static Route<dynamic> route() {
-    return MaterialPageRoute(
-      settings: RouteSettings(name: name),
-      builder: (context) => TabPage(),
+    return MaterialPageRoute<dynamic>(
+      settings: const RouteSettings(name: name),
+      builder: (_) => TabPage(),
     );
   }
 
@@ -31,7 +31,13 @@ class _TabPageState extends State<TabPage> {
               ],
             ),
           ),
-          BottomTabBar(),
+          BottomTabBar(
+            onTabChanged: (int index) {
+              setState(() {
+                _tabIndex = index;
+              });
+            },
+          ),
         ],
       ),
     );
