@@ -23,6 +23,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  String _sexualOrientation;
+  bool _haveCalledSetup = false;
 
   @override
   Widget build(BuildContext context) {
@@ -46,9 +48,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         child: CubitConsumer<AuthCubit, AuthState>(
           listener: (BuildContext context, AuthState state) {
             if (state is AuthSuccess) {
-              final UserPrivate userPrivate = state.userPrivate;
-              _nameController.text = userPrivate.name;
-              _descriptionController.text = userPrivate.description;
+              Navigator.of(context).pop();
             }
           },
           builder: (BuildContext context, AuthState state) {
@@ -91,6 +91,29 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       validator: descriptionValidator,
                     ),
                     const SizedBox(height: 24),
+                    DropdownButtonFormField<String>(
+                      decoration: const InputDecoration(
+                        labelText: 'マッチしたい人',
+                      ),
+                      onChanged: (String value) {
+                        setState(() {
+                          _sexualOrientation = value;
+                        });
+                      },
+                      validator: requiredValidator,
+                      items: UserPrivate.sexualOrientations
+                          .map<DropdownMenuItem<String>>(
+                            (String sexualOrientation) =>
+                                DropdownMenuItem<String>(
+                              child: Text(
+                                UserPrivate.sexualOrientationToJapanese(
+                                    sexualOrientation),
+                              ),
+                              value: sexualOrientation,
+                            ),
+                          )
+                          .toList(),
+                    ),
                   ],
                 ),
               );
@@ -106,8 +129,30 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   @override
+  void didChangeDependencies() {
+    _setup();
+    super.didChangeDependencies();
+  }
+
+  @override
   void dispose() {
     super.dispose();
+  }
+
+  void _setup() {
+    if (_haveCalledSetup) {
+      return;
+    }
+    _haveCalledSetup = true;
+    final AuthState state = CubitProvider.of<AuthCubit>(context).state;
+    if (state is AuthSuccess) {
+      final UserPrivate userPrivate = state.userPrivate;
+      setState(() {
+        _nameController.text = userPrivate.name;
+        _descriptionController.text = userPrivate.description;
+        _sexualOrientation = userPrivate.sexualOrientation;
+      });
+    }
   }
 
   Widget _profileImageButton({
