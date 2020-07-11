@@ -1,10 +1,13 @@
 import 'package:app/cubits/auth/auth_cubit.dart';
 import 'package:app/models/user_private.dart';
+import 'package:app/pages/account/edit_profile_page.dart';
 import 'package:app/widgets/adaptive_dialog.dart';
+import 'package:app/widgets/circle_button.dart';
 import 'package:app/widgets/list_tile_white.dart';
 import 'package:app/widgets/profile_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cubit/flutter_cubit.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:package_info/package_info.dart';
 
 class AccountTab extends StatelessWidget {
@@ -38,13 +41,29 @@ class AccountTab extends StatelessWidget {
                 Text(userPrivate.description ?? '',
                     style: Theme.of(context).textTheme.bodyText1),
                 Row(
-                  children: <Widget>[],
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    CircleButton(
+                      iconData: Feather.settings,
+                      iconColor: const Color(0xFFcdcdcd),
+                      onPressed: () {},
+                    ),
+                    CircleButton(
+                      iconData: Feather.edit_2,
+                      iconColor: const Color(0xFFcdcdcd),
+                      onPressed: () {
+                        Navigator.of(context)
+                            .push<void>(EditProfilePage.route());
+                      },
+                    ),
+                  ],
                 ),
               ],
             );
           }
           return Container();
         }),
+        const SizedBox(height: 24),
         const Divider(),
         ListTileWhite(
           title: '利用規約',

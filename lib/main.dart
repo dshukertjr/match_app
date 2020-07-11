@@ -1,4 +1,5 @@
 import 'package:app/repositories/auth_repository.dart';
+import 'package:app/utilities/color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cubit/flutter_cubit.dart';
@@ -46,6 +47,19 @@ class MyApp extends StatelessWidget {
             dividerTheme: const DividerThemeData(
               space: 1,
               color: Color(0xFF999999),
+            ),
+            appBarTheme: const AppBarTheme(
+              elevation: 0,
+              color: Colors.white,
+              textTheme: TextTheme(
+                headline6: TextStyle(
+                  color: appBlue,
+                  fontSize: 12,
+                ),
+              ),
+              iconTheme: IconThemeData(
+                color: appBlue,
+              ),
             ),
             scaffoldBackgroundColor: const Color(0xFFF3F9FB),
             primarySwatch: Colors.blue,
