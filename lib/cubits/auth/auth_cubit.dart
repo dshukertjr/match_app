@@ -34,17 +34,7 @@ class AuthCubit extends Cubit<AuthState> {
     if (_uid == null) {
       emit(const AuthNoUser());
     } else {
-      _userPrivateSubscription?.cancel();
-      _userPrivateSubscription = _authRepository
-          .userPrivateStream(_uid)
-          .listen((UserPrivate userPrivate) {
-        _userPrivate = userPrivate;
-        if (_userPrivate == null) {
-          emit(AuthNoProfile(uid: _uid));
-        } else {
-          emit(AuthSuccess(uid: _uid, userPrivate: _userPrivate));
-        }
-      });
+      _setUserPrivateListener();
     }
   }
 
@@ -54,17 +44,7 @@ class AuthCubit extends Cubit<AuthState> {
   }) async {
     emit(const AuthLoading());
     try {
-      _userPrivateSubscription?.cancel();
-      _userPrivateSubscription = _authRepository
-          .userPrivateStream(_uid)
-          ?.listen((UserPrivate userPrivate) {
-        _userPrivate = userPrivate;
-        if (_userPrivate == null) {
-          emit(AuthNoProfile(uid: _uid));
-        } else {
-          emit(AuthSuccess(uid: _uid, userPrivate: _userPrivate));
-        }
-      });
+      _setUserPrivateListener();
       _uid = await _authRepository.register(email: email, password: password);
       emit(AuthNoProfile(uid: _uid));
     } on PlatformException catch (e) {
@@ -93,17 +73,7 @@ class AuthCubit extends Cubit<AuthState> {
   }) async {
     emit(const AuthLoading());
     try {
-      _userPrivateSubscription?.cancel();
-      _userPrivateSubscription = _authRepository
-          .userPrivateStream(_uid)
-          .listen((UserPrivate userPrivate) {
-        _userPrivate = userPrivate;
-        if (_userPrivate == null) {
-          emit(AuthNoProfile(uid: _uid));
-        } else {
-          emit(AuthSuccess(uid: _uid, userPrivate: _userPrivate));
-        }
-      });
+      _setUserPrivateListener();
       _uid = await _authRepository.signInWithEmailAndPassword(
         email: email,
         password: password,
@@ -160,5 +130,19 @@ class AuthCubit extends Cubit<AuthState> {
     await _authRepository.signOut();
     _userPrivateSubscription?.cancel();
     emit(const AuthNoUser());
+  }
+
+  void _setUserPrivateListener() {
+    _userPrivateSubscription?.cancel();
+    _userPrivateSubscription = _authRepository
+        .userPrivateStream(_uid)
+        .listen((UserPrivate userPrivate) {
+      _userPrivate = userPrivate;
+      if (_userPrivate == null) {
+        emit(AuthNoProfile(uid: _uid));
+      } else {
+        emit(AuthSuccess(uid: _uid, userPrivate: _userPrivate));
+      }
+    });
   }
 }

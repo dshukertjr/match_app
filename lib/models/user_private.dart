@@ -37,7 +37,8 @@ class UserPrivate {
       uid: snap.data['uid'] as String,
       name: snap.data['name'] as String,
       description: snap.data['description'] as String,
-      imageUrls: List<String>.from(snap.data['imageUrls'] as List<dynamic>),
+      imageUrls: List<String>.from(
+          (snap.data['imageUrls'] ?? <dynamic>[]) as List<dynamic>),
       birthDate: snap.data['birthDate'].toDate() as DateTime,
       sexualOrientation: snap.data['sexualOrientation'] as String,
       wantSexualOrientation: snap.data['wantSexualOrientation'] as String,
@@ -49,7 +50,7 @@ class UserPrivate {
       'uid': uid,
       'name': name,
       'description': description,
-      'profileImageUrl': imageUrls,
+      'imageUrls': imageUrls,
       'birthDate': birthDate,
       'birth': <String, int>{
         'year': birthDate.year,

@@ -1,8 +1,11 @@
+import 'package:app/cubits/auth/auth_cubit.dart';
 import 'package:app/pages/tabs/chat_tab.dart';
 import 'package:app/pages/tabs/person_tab.dart';
 import 'package:app/pages/tabs/search_tab.dart';
+import 'package:app/utilities/auth_navigator.dart';
 import 'package:app/widgets/bottom_tab_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cubit/flutter_cubit.dart';
 
 class TabPage extends StatefulWidget {
   static const String name = 'TabPage';
@@ -22,27 +25,30 @@ class _TabPageState extends State<TabPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: IndexedStack(
-              index: _tabIndex,
-              children: <Widget>[
-                PersonTab(),
-                SearchTab(),
-                ChatTab(),
-              ],
+    return CubitListener<AuthCubit, AuthState>(
+      listener: navigateOnAuthStateChanged,
+      child: Scaffold(
+        body: Column(
+          children: <Widget>[
+            Expanded(
+              child: IndexedStack(
+                index: _tabIndex,
+                children: <Widget>[
+                  PersonTab(),
+                  SearchTab(),
+                  ChatTab(),
+                ],
+              ),
             ),
-          ),
-          BottomTabBar(
-            onTabChanged: (int index) {
-              setState(() {
-                _tabIndex = index;
-              });
-            },
-          ),
-        ],
+            BottomTabBar(
+              onTabChanged: (int index) {
+                setState(() {
+                  _tabIndex = index;
+                });
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -43,11 +43,21 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'LGBT Match',
           theme: ThemeData(
+            dividerTheme: const DividerThemeData(
+              space: 1,
+              color: Color(0xFF999999),
+            ),
             scaffoldBackgroundColor: const Color(0xFFF3F9FB),
             primarySwatch: Colors.blue,
             visualDensity: VisualDensity.adaptivePlatformDensity,
             inputDecorationTheme: const InputDecorationTheme(
               border: OutlineInputBorder(),
+            ),
+            textTheme: const TextTheme(
+              bodyText1: TextStyle(
+                fontSize: 14,
+                color: Color(0xFF777777),
+              ),
             ),
           ),
           home: SplashPage(),

@@ -177,15 +177,10 @@ class _SwipableCardState extends State<SwipableCard>
                   style: Theme.of(context).textTheme.headline4,
                 ),
                 const SizedBox(height: 4),
-                Text(
-                  userPublic.description,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyText1
-                      .copyWith(color: const Color(0xFF777777)),
-                ),
+                Text(userPublic.description,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.bodyText1),
                 const SizedBox(height: 4),
                 Text(
                   '${userPublic.distance} km away',
