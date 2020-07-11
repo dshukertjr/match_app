@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:app/cubits/auth/auth_cubit.dart';
 import 'package:app/data_providers/firestore_provider.dart';
+import 'package:app/models/user_private.dart';
 import 'package:app/repositories/auth_repository.dart';
 import 'package:cubit_test/cubit_test.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -15,9 +18,21 @@ void main() {
     setUp(() {
       final MockAuthRepository authRepository = MockAuthRepository();
 
+      Stream<UserPrivate> _userPrivateStream() async* {
+        yield UserPrivate(
+            uid: 'aaa',
+            name: 'a',
+            imageUrls: <String>[],
+            birthDate: DateTime(2000, 9, 18),
+            sexualOrientation: SexualOrientation.bisexual,
+            wantSexualOrientation: SexualOrientation.bisexual);
+      }
+
       when(authRepository.getUid).thenAnswer((_) async => null);
       when(authRepository.register(email: '', password: ''))
           .thenAnswer((_) async => 'aaa');
+      when(authRepository.userPrivateStream('aaa'))
+          .thenAnswer((_) => _userPrivateStream());
       authCubit = AuthCubit(authRepository: authRepository);
     });
 

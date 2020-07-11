@@ -20,6 +20,7 @@ class FirestoreProvider {
   }
 
   Stream<DocumentSnapshot> userPrivateStream(String uid) {
+    assert(uid != null);
     return _firestore.document('$_userPrivatesCollection/$uid').snapshots();
   }
 }

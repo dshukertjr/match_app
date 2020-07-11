@@ -44,8 +44,8 @@ class AuthCubit extends Cubit<AuthState> {
   }) async {
     emit(const AuthLoading());
     try {
-      _setUserPrivateListener();
       _uid = await _authRepository.register(email: email, password: password);
+      _setUserPrivateListener();
       emit(AuthNoProfile(uid: _uid));
     } on PlatformException catch (e) {
       switch (e.code) {
