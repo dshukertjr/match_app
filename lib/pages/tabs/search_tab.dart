@@ -1,5 +1,6 @@
 import 'package:app/models/user_public.dart';
 import 'package:app/utilities/color.dart';
+import 'package:app/widgets/circle_button.dart';
 import 'package:app/widgets/swipable_card.dart';
 import 'package:flutter/material.dart';
 
@@ -75,32 +76,11 @@ class _SearchTabState extends State<SearchTab> {
     @required Color color,
     @required void Function() onPressed,
   }) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-            color: appBlue.withOpacity(0.1),
-            offset: const Offset(0, 4),
-            blurRadius: 10,
-            spreadRadius: 0,
-          ),
-        ],
-        shape: BoxShape.circle,
-      ),
-      child: ClipOval(
-        child: Material(
-          color: Colors.white,
-          child: InkResponse(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Icon(
-                iconData,
-                color: color,
-              ),
-            ),
-          ),
-        ),
-      ),
+    return CircleButton(
+      iconColor: color,
+      iconData: iconData,
+      onPressed: onPressed,
+      shadowColor: appBlue.withOpacity(0.1),
     );
   }
 }

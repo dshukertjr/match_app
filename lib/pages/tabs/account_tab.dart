@@ -5,9 +5,10 @@ import 'package:app/widgets/list_tile_white.dart';
 import 'package:app/widgets/profile_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cubit/flutter_cubit.dart';
+import 'package:package_info/package_info.dart';
 
-class PersonTab extends StatelessWidget {
-  static const String name = 'PersonTab';
+class AccountTab extends StatelessWidget {
+  static const String name = 'AccountTab';
 
   @override
   Widget build(BuildContext context) {
@@ -36,11 +37,46 @@ class PersonTab extends StatelessWidget {
                 const SizedBox(height: 12),
                 Text(userPrivate.description ?? '',
                     style: Theme.of(context).textTheme.bodyText1),
+                Row(
+                  children: <Widget>[],
+                ),
               ],
             );
           }
           return Container();
         }),
+        const Divider(),
+        ListTileWhite(
+          title: '利用規約',
+          onPressed: () {},
+        ),
+        const Divider(),
+        ListTileWhite(
+          title: 'プライバシーポリシー',
+          onPressed: () {},
+        ),
+        const Divider(),
+        ListTileWhite(
+          title: 'このアプリについて',
+          onPressed: () async {
+            final PackageInfo packageInfo = await PackageInfo.fromPlatform();
+            final String appName = packageInfo.appName;
+            final String version = packageInfo.version;
+            showAboutDialog(
+              routeSettings: const RouteSettings(name: 'aboutDialog'),
+              context: context,
+              applicationName: appName,
+              applicationVersion: version,
+              children: <Widget>[
+                const Text(
+                  'このアプリケーションは性的指向に関係なく恋愛を楽しんでもらうためのマッチングサービスを提供するアプリケーションです。',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ],
+            );
+          },
+        ),
+        const Divider(),
         const SizedBox(height: 48),
         const Divider(),
         ListTileWhite(
