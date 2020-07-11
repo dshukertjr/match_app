@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:app/cubits/auth/auth_cubit.dart';
 import 'package:app/models/user_private.dart';
+import 'package:app/utilities/auth_navigator.dart';
 import 'package:app/utilities/validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -57,38 +58,48 @@ class _EnterProfilePageState extends State<EnterProfilePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('プロフィール登録'),
-        actions: <Widget>[
-          if (!kReleaseMode)
-            FlatButton(
-              onPressed: () {
-                CubitProvider.of<AuthCubit>(context).logout();
-              },
-              child: const Text('logout'),
-            ),
-        ],
       ),
       body: _body(context),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: _fab(),
+      floatingActionButton: _fab(context),
     );
   }
 
-  RaisedButton _fab() {
-    return RaisedButton(
-      key: EnterProfilePage.pageSubmitButtonKey,
-      onPressed: _submit,
-      child: const Text('次へ'),
-    );
+  Widget _fab(BuildContext context) {
+    return CubitBuilder<AuthCubit, AuthState>(builder: (_, AuthState state) {
+      if (state is AuthLoading) {
+        return const RaisedButton(
+          key: EnterProfilePage.pageSubmitButtonKey,
+          onPressed: null,
+          child: SizedBox(
+            width: 24,
+            height: 24,
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+            ),
+          ),
+        );
+      }
+      return RaisedButton(
+        key: EnterProfilePage.pageSubmitButtonKey,
+        onPressed: _submit,
+        child: const Text('次へ'),
+      );
+    });
   }
 
   Widget _body(BuildContext context) {
-    return PageView(
-      controller: _pageController,
-      children: <Widget>[
-        _page1(),
-        _page2(context),
-        _page3(context),
-      ],
+    return CubitListener<AuthCubit, AuthState>(
+      listener: navigateOnAuthStateChanged,
+      child: PageView(
+        physics: const NeverScrollableScrollPhysics(),
+        controller: _pageController,
+        children: <Widget>[
+          _page1(),
+          _page2(context),
+          _page3(context),
+        ],
+      ),
     );
   }
 

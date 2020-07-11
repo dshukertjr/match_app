@@ -70,6 +70,7 @@ class AuthRepository {
   }
 
   Stream<UserPrivate> userPrivateStream(String uid) {
+    assert(uid != null);
     return _firestoreProvider.userPrivateStream(uid).map(UserPrivate.fromSnap);
   }
 }
