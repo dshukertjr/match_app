@@ -28,7 +28,7 @@ class BottomTabBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Ink(
+    return Material(
       color: Colors.white,
       child: Row(
         children: _tabInfo

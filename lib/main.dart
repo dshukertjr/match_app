@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'LGBT Match',
           theme: ThemeData(
-            scaffoldBackgroundColor: const Color(0xFFdaeef3),
+            scaffoldBackgroundColor: const Color(0xFFF3F9FB),
             primarySwatch: Colors.blue,
             visualDensity: VisualDensity.adaptivePlatformDensity,
             inputDecorationTheme: const InputDecorationTheme(
