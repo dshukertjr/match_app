@@ -1,4 +1,6 @@
-import 'package:app/pages/tabs/search_page.dart';
+import 'package:app/pages/tabs/chat_tab.dart';
+import 'package:app/pages/tabs/person_tab.dart';
+import 'package:app/pages/tabs/search_tab.dart';
 import 'package:app/widgets/bottom_tab_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +18,7 @@ class TabPage extends StatefulWidget {
 }
 
 class _TabPageState extends State<TabPage> {
-  int _tabIndex = 0;
+  int _tabIndex = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +29,9 @@ class _TabPageState extends State<TabPage> {
             child: IndexedStack(
               index: _tabIndex,
               children: <Widget>[
+                PersonTab(),
                 SearchTab(),
+                ChatTab(),
               ],
             ),
           ),
