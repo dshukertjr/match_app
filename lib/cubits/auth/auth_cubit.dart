@@ -108,8 +108,9 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  Future<void> saveProfile({
+  Future<void> saveUserPrivate({
     @required String name,
+    String description,
     @required File imageFile,
     @required DateTime birthDate,
     @required String sexualOrientation,
@@ -118,6 +119,7 @@ class AuthCubit extends Cubit<AuthState> {
     emit(const AuthLoading());
     await _authRepository.saveProfile(
       name: name,
+      description: description,
       imageFile: imageFile,
       birthDate: birthDate,
       sexualOrientation: sexualOrientation,

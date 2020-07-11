@@ -50,6 +50,7 @@ class AuthRepository {
 
   Future<void> saveProfile({
     @required String name,
+    String description,
     @required File imageFile,
     @required DateTime birthDate,
     @required String sexualOrientation,
@@ -61,6 +62,7 @@ class AuthRepository {
     final UserPrivate userPrivate = UserPrivate(
       uid: uid,
       name: name,
+      description: description,
       birthDate: birthDate,
       imageUrls: <String>[imageUrl],
       sexualOrientation: sexualOrientation,

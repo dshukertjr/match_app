@@ -24,6 +24,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   String _sexualOrientation;
+  String _wantingSexualOrientation;
   bool _haveCalledSetup = false;
 
   @override
@@ -35,6 +36,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         actions: <Widget>[
           FlatButton.icon(
             onPressed: () {
+              _save(context);
               Navigator.of(context).pop();
             },
             textColor: appBlue,
@@ -93,7 +95,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     const SizedBox(height: 24),
                     DropdownButtonFormField<String>(
                       decoration: const InputDecoration(
-                        labelText: 'マッチしたい人',
+                        labelText: '自分のセクシュアリティ',
                       ),
                       onChanged: (String value) {
                         setState(() {
@@ -114,6 +116,33 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           )
                           .toList(),
                     ),
+                    const SizedBox(height: 24),
+                    DropdownButtonFormField<String>(
+                      decoration: const InputDecoration(
+                        labelText: 'マッチしたい人',
+                      ),
+                      onChanged: (String value) {
+                        setState(() {
+                          _wantingSexualOrientation = value;
+                        });
+                      },
+                      validator: requiredValidator,
+                      items: UserPrivate.sexualOrientations
+                          .where((String sexualOrientation) =>
+                              sexualOrientation != SexualOrientation.hide)
+                          .map<DropdownMenuItem<String>>(
+                            (String sexualOrientation) =>
+                                DropdownMenuItem<String>(
+                              child: Text(
+                                UserPrivate.sexualOrientationToJapanese(
+                                    sexualOrientation),
+                              ),
+                              value: sexualOrientation,
+                            ),
+                          )
+                          .toList(),
+                    ),
+                    const SizedBox(height: 24),
                   ],
                 ),
               );
@@ -151,6 +180,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         _nameController.text = userPrivate.name;
         _descriptionController.text = userPrivate.description;
         _sexualOrientation = userPrivate.sexualOrientation;
+        _wantingSexualOrientation = userPrivate.wantSexualOrientation;
       });
     }
   }
@@ -184,12 +214,29 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       fit: BoxFit.cover,
                     )
                   : Center(
-                      child: Icon(Feather.image),
+                      child: Icon(
+                        Feather.plus_circle,
+                        color: appBlue,
+                      ),
                     ),
             ),
           ),
         ),
       ),
+    );
+  }
+
+  void _save(BuildContext context) {
+    if (!_formKey.currentState.validate()) {
+      return;
+    }
+    CubitProvider.of<AuthCubit>(context).saveUserPrivate(
+      name: _nameController.text,
+      description: _descriptionController.text,
+      imageFile: null,
+      birthDate: null,
+      sexualOrientation: _sexualOrientation,
+      wantSexualOrientation: _wantingSexualOrientation,
     );
   }
 }

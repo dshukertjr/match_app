@@ -313,7 +313,7 @@ class _EnterProfilePageState extends State<EnterProfilePage> {
           duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
     } else {
       final String name = _nameController.text;
-      CubitProvider.of<AuthCubit>(context).saveProfile(
+      CubitProvider.of<AuthCubit>(context).saveUserPrivate(
         name: name,
         imageFile: _profileImageFile,
         birthDate: _birthDate,
