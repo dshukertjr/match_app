@@ -1,5 +1,5 @@
 import 'package:app/data_providers/firestore_provider.dart';
-import 'package:app/models/profile.dart';
+import 'package:app/models/user_private.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 
@@ -16,7 +16,7 @@ void main() {
         sexualOrientation: SexualOrientation.gay,
         wantSexualOrientation: SexualOrientation.gay,
         birthDate: DateTime(2000, 9, 18),
-        profileImageUrl: 'https://some.com',
+        imageUrls: <String>['https://some.com'],
       );
 
       when(firestoreProvider.saveProfile(

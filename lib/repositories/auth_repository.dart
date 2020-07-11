@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:app/data_providers/auth_provider.dart';
 import 'package:app/data_providers/firestore_provider.dart';
 import 'package:app/data_providers/storage_provider.dart';
-import 'package:app/models/profile.dart';
+import 'package:app/models/user_private.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
@@ -62,7 +62,7 @@ class AuthRepository {
       uid: uid,
       name: name,
       birthDate: birthDate,
-      profileImageUrl: imageUrl,
+      imageUrls: <String>[imageUrl],
       sexualOrientation: sexualOrientation,
       wantSexualOrientation: wantSexualOrientation,
     );
