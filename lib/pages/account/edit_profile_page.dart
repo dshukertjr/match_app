@@ -1,4 +1,5 @@
 import 'package:app/cubits/auth/auth_cubit.dart';
+import 'package:app/models/editing_profile_image.dart';
 import 'package:app/models/user_private.dart';
 import 'package:app/utilities/color.dart';
 import 'package:app/utilities/validator.dart';
@@ -21,6 +22,8 @@ class EditProfilePage extends StatefulWidget {
 
 class _EditProfilePageState extends State<EditProfilePage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  List<EditingProfileImage> _editingProfileImages =
+      List<EditingProfileImage>.filled(6, null);
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   String _sexualOrientation;
@@ -86,7 +89,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     TextFormField(
                       maxLines: null,
                       maxLength: maxDescriptionLength,
-                      controller: _nameController,
+                      controller: _descriptionController,
                       decoration: const InputDecoration(
                         labelText: 'プロフィール',
                       ),
@@ -94,6 +97,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     ),
                     const SizedBox(height: 24),
                     DropdownButtonFormField<String>(
+                      value: _sexualOrientation,
                       decoration: const InputDecoration(
                         labelText: '自分のセクシュアリティ',
                       ),
@@ -118,6 +122,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     ),
                     const SizedBox(height: 24),
                     DropdownButtonFormField<String>(
+                      value: _wantingSexualOrientation,
                       decoration: const InputDecoration(
                         labelText: 'マッチしたい人',
                       ),
@@ -142,7 +147,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           )
                           .toList(),
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 100),
                   ],
                 ),
               );
@@ -181,6 +186,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
         _descriptionController.text = userPrivate.description;
         _sexualOrientation = userPrivate.sexualOrientation;
         _wantingSexualOrientation = userPrivate.wantSexualOrientation;
+        _editingProfileImages =
+            EditingProfileImage.fromImageUrls(userPrivate.imageUrls);
       });
     }
   }

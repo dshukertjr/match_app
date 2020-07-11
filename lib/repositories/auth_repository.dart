@@ -57,8 +57,11 @@ class AuthRepository {
     @required String wantSexualOrientation,
   }) async {
     final String uid = await getUid;
-    final String imageUrl = await _storageProvider.uploadFile(
-        path: 'profileImages/$uid/image.jpg', file: imageFile);
+    String imageUrl;
+    if (imageFile != null) {
+      imageUrl = await _storageProvider.uploadFile(
+          path: 'profileImages/$uid/image.jpg', file: imageFile);
+    }
     final UserPrivate userPrivate = UserPrivate(
       uid: uid,
       name: name,
