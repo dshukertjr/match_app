@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:app/cubits/auth/auth_cubit.dart';
 import 'package:app/models/editing_profile_image.dart';
 import 'package:app/models/user_private.dart';
@@ -7,6 +9,7 @@ import 'package:app/widgets/custom_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cubit/flutter_cubit.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:image_picker/image_picker.dart';
 
 class EditProfilePage extends StatefulWidget {
   static const String name = 'EditProfilePage';
@@ -58,7 +61,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
           },
           builder: (BuildContext context, AuthState state) {
             if (state is AuthSuccess) {
-              final UserPrivate userPrivate = state.userPrivate;
               return Form(
                 key: _formKey,
                 child: Column(
@@ -70,7 +72,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           6,
                           (int index) => _profileImageButton(
                             context: context,
-                            imageUrls: userPrivate.imageUrls,
+                            editingProfileImages: _editingProfileImages,
                             index: index,
                             availableWidth: constraints.maxWidth,
                           ),
@@ -194,11 +196,30 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   Widget _profileImageButton({
     @required BuildContext context,
-    @required List<String> imageUrls,
+    @required List<EditingProfileImage> editingProfileImages,
     @required int index,
     @required double availableWidth,
   }) {
-    final bool hasImageAtTheIndex = index < imageUrls.length;
+    final EditingProfileImage editingProfileImage = editingProfileImages[index];
+    Widget child = Center(
+      child: Icon(
+        Feather.plus_circle,
+        color: appBlue,
+      ),
+    );
+    if (editingProfileImage?.imageFile != null) {
+      child = Ink.image(
+        image: FileImage(editingProfileImage.imageFile),
+        fit: BoxFit.cover,
+      );
+    } else if (editingProfileImage?.imageUrl != null) {
+      child = Ink.image(
+        image: NetworkImage(
+          editingProfileImage.imageUrl,
+        ),
+        fit: BoxFit.cover,
+      );
+    }
     return SizedBox(
       width: availableWidth / 3,
       child: Padding(
@@ -212,20 +233,18 @@ class _EditProfilePageState extends State<EditProfilePage> {
               borderRadius: BorderRadius.circular(12),
             ),
             child: InkWell(
-              onTap: () {},
-              child: hasImageAtTheIndex
-                  ? Ink.image(
-                      image: NetworkImage(
-                        imageUrls[index],
-                      ),
-                      fit: BoxFit.cover,
-                    )
-                  : Center(
-                      child: Icon(
-                        Feather.plus_circle,
-                        color: appBlue,
-                      ),
-                    ),
+              onTap: () async {
+                final PickedFile imageFile =
+                    await ImagePicker().getImage(source: ImageSource.gallery);
+                setState(() {
+                  _editingProfileImages = EditingProfileImage.addNewImage(
+                    editingProfileImages: _editingProfileImages,
+                    updatingIndex: index,
+                    newFile: File(imageFile.path),
+                  );
+                });
+              },
+              child: child,
             ),
           ),
         ),
