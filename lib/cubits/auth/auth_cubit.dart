@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:app/models/editing_profile_image.dart';
 import 'package:app/models/user_private.dart';
