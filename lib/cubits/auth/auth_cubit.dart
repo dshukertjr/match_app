@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:app/models/editing_profile_image.dart';
 import 'package:app/models/user_private.dart';
 import 'package:app/repositories/auth_repository.dart';
 import 'package:cubit/cubit.dart';
@@ -111,16 +112,17 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> saveUserPrivate({
     @required String name,
     String description,
-    @required File imageFile,
+    @required List<EditingProfileImage> editingProfileImages,
     @required DateTime birthDate,
     @required String sexualOrientation,
     @required String wantSexualOrientation,
   }) async {
+    assert(editingProfileImages != null);
     emit(const AuthLoading());
     await _authRepository.saveProfile(
       name: name,
       description: description,
-      imageFile: imageFile,
+      editingProfileImages: editingProfileImages,
       birthDate: birthDate,
       sexualOrientation: sexualOrientation,
       wantSexualOrientation: wantSexualOrientation,

@@ -77,11 +77,13 @@ class UserPrivate {
       'description': description,
       'imageUrls': imageUrls,
       'birthDate': birthDate,
-      'birth': <String, int>{
-        'year': birthDate.year,
-        'month': birthDate.month,
-        'date': birthDate.day,
-      },
+      'birth': birthDate == null
+          ? null
+          : <String, int>{
+              'year': birthDate.year,
+              'month': birthDate.month,
+              'date': birthDate.day,
+            },
       'sexualOrientation': sexualOrientation,
       'wantSexualOrientation': wantSexualOrientation,
     }..removeWhere((String key, dynamic value) => value == null);

@@ -234,15 +234,21 @@ class _EditProfilePageState extends State<EditProfilePage> {
             ),
             child: InkWell(
               onTap: () async {
-                final PickedFile imageFile =
-                    await ImagePicker().getImage(source: ImageSource.gallery);
-                setState(() {
-                  _editingProfileImages = EditingProfileImage.addNewImage(
-                    editingProfileImages: _editingProfileImages,
-                    updatingIndex: index,
-                    newFile: File(imageFile.path),
-                  );
-                });
+                final PickedFile imageFile = await ImagePicker().getImage(
+                  source: ImageSource.gallery,
+                  maxHeight: 600,
+                  maxWidth: 400,
+                  imageQuality: 75,
+                );
+                if (imageFile != null) {
+                  setState(() {
+                    _editingProfileImages = EditingProfileImage.addNewImage(
+                      editingProfileImages: _editingProfileImages,
+                      updatingIndex: index,
+                      newFile: File(imageFile.path),
+                    );
+                  });
+                }
               },
               child: child,
             ),
@@ -259,7 +265,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     CubitProvider.of<AuthCubit>(context).saveUserPrivate(
       name: _nameController.text,
       description: _descriptionController.text,
-      imageFile: null,
+      editingProfileImages: _editingProfileImages,
       birthDate: null,
       sexualOrientation: _sexualOrientation,
       wantSexualOrientation: _wantingSexualOrientation,

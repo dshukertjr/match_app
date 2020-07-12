@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:app/cubits/auth/auth_cubit.dart';
+import 'package:app/models/editing_profile_image.dart';
 import 'package:app/models/user_private.dart';
 import 'package:app/utilities/auth_navigator.dart';
 import 'package:app/utilities/validator.dart';
@@ -95,7 +96,7 @@ class _EnterProfilePageState extends State<EnterProfilePage> {
         physics: const NeverScrollableScrollPhysics(),
         controller: _pageController,
         children: <Widget>[
-          _page1(),
+          _page1(context),
           _page2(context),
           _page3(context),
         ],
@@ -224,7 +225,7 @@ class _EnterProfilePageState extends State<EnterProfilePage> {
   }
 
   /// Set profile image, name, and birthDate
-  Widget _page1() {
+  Widget _page1(BuildContext context) {
     return SingleChildScrollView(
       child: Form(
         key: _formKey,
@@ -250,7 +251,7 @@ class _EnterProfilePageState extends State<EnterProfilePage> {
                             ),
                           )
                         : Ink.image(
-                            image: Image.file(_profileImageFile).image,
+                            image: FileImage(_profileImageFile),
                             fit: BoxFit.cover,
                             child: Center(
                               child: Icon(
@@ -315,7 +316,9 @@ class _EnterProfilePageState extends State<EnterProfilePage> {
       final String name = _nameController.text;
       CubitProvider.of<AuthCubit>(context).saveUserPrivate(
         name: name,
-        imageFile: _profileImageFile,
+        editingProfileImages: <EditingProfileImage>[
+          EditingProfileImage(imageFile: _profileImageFile)
+        ],
         birthDate: _birthDate,
         sexualOrientation: _selfSexualOrientation,
         wantSexualOrientation: _wantSexualOrientation,
@@ -346,8 +349,8 @@ class _EnterProfilePageState extends State<EnterProfilePage> {
   Future<void> _pickProfileImage() async {
     final PickedFile selectedImageFile = await ImagePicker().getImage(
       source: ImageSource.gallery,
-      maxHeight: 500,
-      maxWidth: 500,
+      maxHeight: 600,
+      maxWidth: 400,
       imageQuality: 75,
     );
     if (selectedImageFile != null) {
