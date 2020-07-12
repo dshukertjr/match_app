@@ -1,17 +1,26 @@
+import 'package:app/cubits/prospect/prospect_cubit.dart';
 import 'package:app/models/user_public.dart';
 import 'package:app/utilities/color.dart';
 import 'package:app/widgets/circle_button.dart';
+import 'package:app/widgets/custom_loader.dart';
 import 'package:app/widgets/swipable_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cubit/flutter_cubit.dart';
 
-class SearchTab extends StatefulWidget {
-  static const String name = 'SearchTab';
+class SwipeTab extends StatefulWidget {
+  static const String name = 'SwipeTab';
+  static Widget create() {
+    return CubitProvider<ProspectCubit>(
+      create: (_) => ProspectCubit()..initialize(),
+      child: SwipeTab(),
+    );
+  }
 
   @override
-  _SearchTabState createState() => _SearchTabState();
+  _SwipeTabState createState() => _SwipeTabState();
 }
 
-class _SearchTabState extends State<SearchTab> {
+class _SwipeTabState extends State<SwipeTab> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -24,24 +33,29 @@ class _SearchTabState extends State<SearchTab> {
                 left: 16,
                 right: 16,
               ),
-              child: SwipableCard(
-                onSwipeRight: () {},
-                onSwipeLeft: () {},
-                userPublic: const UserPublic(
-                  uid: 'aaa',
-                  name: 'Mike',
-                  description:
-                      'Love working out on the weekends. Looking for buddies into "working out" with me if you know what I mean ;)',
-                  distance: 12,
-                  imageUrls: <String>[
-                    'https://66.media.tumblr.com/9c6c8faae2312c070d50b295489e1e19/tumblr_pwucvbk3IT1swrlp8o1_400.jpg',
-                    'https://i.pinimg.com/originals/f6/c6/0b/f6c60b23077a06f05e1be37726d5b522.jpg',
-                    'https://i.pinimg.com/originals/0d/2f/22/0d2f22a0b331ac00275df44a92219352.jpg',
-                    'https://usercontent1.hubstatic.com/8628202.jpg',
-                    'https://eskipaper.com/images/high-resolution-backgrounds-11.jpg',
-                  ],
-                ),
-              ),
+              child: CubitBuilder<ProspectCubit, ProspectState>(
+                  builder: (BuildContext context, ProspectState state) {
+                if (state is ProspectSuccess) {
+                  final List<UserPublic> prospects = state.prospects;
+                  return Stack(
+                    fit: StackFit.expand,
+                    children: <Widget>[
+                      SwipableCard(
+                        onSwipeRight: () {
+                          CubitProvider.of<ProspectCubit>(context)
+                              .like(prospects.first);
+                        },
+                        onSwipeLeft: () {},
+                        prospects: prospects,
+                      ),
+                    ],
+                  );
+                } else {
+                  return Center(
+                    child: CustomLoader(),
+                  );
+                }
+              }),
             ),
           ),
           _buttons(context),

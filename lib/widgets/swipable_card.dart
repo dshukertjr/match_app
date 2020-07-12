@@ -6,15 +6,15 @@ import 'package:flutter/material.dart';
 class SwipableCard extends StatefulWidget {
   const SwipableCard({
     Key key,
-    @required UserPublic userPublic,
+    @required List<UserPublic> prospects,
     @required void Function() onSwipeRight,
     @required void Function() onSwipeLeft,
-  })  : _userPublic = userPublic,
+  })  : _prospects = prospects,
         _onSwipeRight = onSwipeRight,
         _onSwipeLeft = onSwipeLeft,
         super(key: key);
 
-  final UserPublic _userPublic;
+  final List<UserPublic> _prospects;
   final void Function() _onSwipeRight;
   final void Function() _onSwipeLeft;
 
@@ -41,7 +41,7 @@ class _SwipableCardState extends State<SwipableCard>
         final double horizontalSwipeDistance = _cardOffset.dx;
         final double screenWidth = MediaQuery.of(context).size.width;
         final bool didNotMoveMuch =
-            (horizontalSwipeDistance.abs() / screenWidth) < 0.4;
+            (horizontalSwipeDistance.abs() / screenWidth) < 0.3;
         if (didNotMoveMuch) {
           _animateBack();
         } else {
@@ -56,7 +56,7 @@ class _SwipableCardState extends State<SwipableCard>
         offset: _cardOffset,
         child: _card(
           context: context,
-          userPublic: widget._userPublic,
+          userPublic: widget._prospects.first,
         ),
       ),
     );
@@ -64,8 +64,7 @@ class _SwipableCardState extends State<SwipableCard>
 
   Widget _card(
       {@required BuildContext context, @required UserPublic userPublic}) {
-    return Container(
-      clipBehavior: Clip.antiAlias,
+    return DecoratedBox(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         boxShadow: <BoxShadow>[
@@ -76,123 +75,129 @@ class _SwipableCardState extends State<SwipableCard>
             spreadRadius: 0,
           ),
         ],
-        color: Colors.white,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Expanded(
-            child: ClipPath(
-              clipBehavior: Clip.antiAlias,
-              clipper: _CardClipper(),
-              child: Stack(
-                fit: StackFit.expand,
-                children: <Widget>[
-                  LayoutBuilder(
-                    builder:
-                        (BuildContext context, BoxConstraints constraints) {
-                      return GestureDetector(
-                        onTapDown: (TapDownDetails details) {
-                          final bool tappedLeftHalf =
-                              (details.localPosition.dx /
-                                      constraints.maxWidth) <
-                                  0.5;
-                          if (tappedLeftHalf) {
-                            if (_currentImageIndex > 0) {
-                              setState(() {
-                                _currentImageIndex--;
-                              });
+      child: Container(
+        clipBehavior: Clip.antiAlias,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: Colors.white,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Expanded(
+              child: ClipPath(
+                clipBehavior: Clip.antiAlias,
+                clipper: _CardClipper(),
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: <Widget>[
+                    LayoutBuilder(
+                      builder:
+                          (BuildContext context, BoxConstraints constraints) {
+                        return GestureDetector(
+                          onTapDown: (TapDownDetails details) {
+                            final bool tappedLeftHalf =
+                                (details.localPosition.dx /
+                                        constraints.maxWidth) <
+                                    0.5;
+                            if (tappedLeftHalf) {
+                              if (_currentImageIndex > 0) {
+                                setState(() {
+                                  _currentImageIndex--;
+                                });
+                              }
+                            } else {
+                              if (_currentImageIndex <
+                                  (userPublic.imageUrls.length - 1)) {
+                                setState(() {
+                                  _currentImageIndex++;
+                                });
+                              }
                             }
-                          } else {
-                            if (_currentImageIndex <
-                                (userPublic.imageUrls.length - 1)) {
-                              setState(() {
-                                _currentImageIndex++;
-                              });
-                            }
-                          }
-                        },
-                        child: Image.network(
-                          userPublic.imageUrls[_currentImageIndex],
-                          fit: BoxFit.cover,
-                          loadingBuilder: (_, Widget child,
-                              ImageChunkEvent loadingProgress) {
-                            if (loadingProgress == null) {
-                              return child;
-                            }
-                            final double progress =
-                                loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes;
-                            return Center(
-                              child: CircularProgressIndicator(
-                                value: progress,
-                              ),
-                            );
                           },
-                        ),
-                      );
-                    },
-                  ),
-                  Positioned(
-                      top: 12,
-                      left: 12,
-                      right: 12,
-                      child: Row(
-                        children: userPublic.imageUrls.map<Widget>(
-                          (String imageUrl) {
-                            final bool isActiveIndex =
-                                userPublic.imageUrls.indexOf(imageUrl) ==
-                                    _currentImageIndex;
-                            final Color color = isActiveIndex
-                                ? Colors.white
-                                : Colors.white.withOpacity(0.4);
-                            return Expanded(
-                              child: Container(
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 4),
-                                height: 4,
-                                decoration: BoxDecoration(
-                                  color: color,
-                                  borderRadius: BorderRadius.circular(2),
+                          child: Image.network(
+                            userPublic.imageUrls[_currentImageIndex],
+                            fit: BoxFit.cover,
+                            loadingBuilder: (_, Widget child,
+                                ImageChunkEvent loadingProgress) {
+                              if (loadingProgress == null) {
+                                return child;
+                              }
+                              final double progress =
+                                  loadingProgress.cumulativeBytesLoaded /
+                                      loadingProgress.expectedTotalBytes;
+                              return Center(
+                                child: CircularProgressIndicator(
+                                  value: progress,
                                 ),
-                              ),
-                            );
-                          },
-                        ).toList(),
-                      )),
+                              );
+                            },
+                          ),
+                        );
+                      },
+                    ),
+                    Positioned(
+                        top: 12,
+                        left: 12,
+                        right: 12,
+                        child: Row(
+                          children: userPublic.imageUrls.map<Widget>(
+                            (String imageUrl) {
+                              final bool isActiveIndex =
+                                  userPublic.imageUrls.indexOf(imageUrl) ==
+                                      _currentImageIndex;
+                              final Color color = isActiveIndex
+                                  ? Colors.white
+                                  : Colors.white.withOpacity(0.4);
+                              return Expanded(
+                                child: Container(
+                                  margin:
+                                      const EdgeInsets.symmetric(horizontal: 4),
+                                  height: 4,
+                                  decoration: BoxDecoration(
+                                    color: color,
+                                    borderRadius: BorderRadius.circular(2),
+                                  ),
+                                ),
+                              );
+                            },
+                          ).toList(),
+                        )),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 12,
+                horizontal: 12,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Text(
+                    userPublic.name,
+                    style: Theme.of(context).textTheme.headline4,
+                  ),
+                  const SizedBox(height: 4),
+                  Text(userPublic.description,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.bodyText1),
+                  const SizedBox(height: 4),
+                  Text(
+                    '${userPublic.distance} km away',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText1
+                        .copyWith(color: const Color(0xFFAAAAAA)),
+                  ),
                 ],
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: 12,
-              horizontal: 12,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Text(
-                  userPublic.name,
-                  style: Theme.of(context).textTheme.headline4,
-                ),
-                const SizedBox(height: 4),
-                Text(userPublic.description,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodyText1),
-                const SizedBox(height: 4),
-                Text(
-                  '${userPublic.distance} km away',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyText1
-                      .copyWith(color: const Color(0xFFAAAAAA)),
-                ),
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -252,6 +257,9 @@ class _SwipableCardState extends State<SwipableCard>
       ..addStatusListener((AnimationStatus status) {
         if (status == AnimationStatus.completed) {
           widget._onSwipeRight();
+          setState(() {
+            _cardOffset = const Offset(0, 0);
+          });
         }
       });
   }
@@ -284,6 +292,9 @@ class _SwipableCardState extends State<SwipableCard>
       ..addStatusListener((AnimationStatus status) {
         if (status == AnimationStatus.completed) {
           widget._onSwipeLeft();
+          setState(() {
+            _cardOffset = const Offset(0, 0);
+          });
         }
       });
   }
