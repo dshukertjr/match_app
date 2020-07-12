@@ -29,6 +29,31 @@ class UserPrivate {
   final String sexualOrientation;
   final String wantSexualOrientation;
 
+  static const List<String> sexualOrientations = <String>[
+    SexualOrientation.gay,
+    SexualOrientation.lesbian,
+    SexualOrientation.bisexual,
+    SexualOrientation.transgender,
+    SexualOrientation.hide,
+  ];
+
+  static String sexualOrientationToJapanese(String sexualOrientation) {
+    switch (sexualOrientation) {
+      case SexualOrientation.gay:
+        return 'ゲイ';
+      case SexualOrientation.lesbian:
+        return 'レズビアン';
+      case SexualOrientation.bisexual:
+        return 'バイセクシュアル';
+      case SexualOrientation.transgender:
+        return 'トランスジェンダー';
+      case SexualOrientation.hide:
+        return '隠す';
+      default:
+        return '不明';
+    }
+  }
+
   static UserPrivate fromSnap(DocumentSnapshot snap) {
     if (!snap.exists) {
       return null;
@@ -52,11 +77,13 @@ class UserPrivate {
       'description': description,
       'imageUrls': imageUrls,
       'birthDate': birthDate,
-      'birth': <String, int>{
-        'year': birthDate.year,
-        'month': birthDate.month,
-        'date': birthDate.day,
-      },
+      'birth': birthDate == null
+          ? null
+          : <String, int>{
+              'year': birthDate.year,
+              'month': birthDate.month,
+              'date': birthDate.day,
+            },
       'sexualOrientation': sexualOrientation,
       'wantSexualOrientation': wantSexualOrientation,
     }..removeWhere((String key, dynamic value) => value == null);

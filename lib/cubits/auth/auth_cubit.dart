@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'dart:io';
 
+import 'package:app/models/editing_profile_image.dart';
 import 'package:app/models/user_private.dart';
 import 'package:app/repositories/auth_repository.dart';
 import 'package:cubit/cubit.dart';
@@ -108,21 +108,29 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  Future<void> saveProfile({
+  Future<void> saveUserPrivate({
     @required String name,
-    @required File imageFile,
+    String description,
+    @required List<EditingProfileImage> editingProfileImages,
     @required DateTime birthDate,
     @required String sexualOrientation,
     @required String wantSexualOrientation,
   }) async {
+    assert(editingProfileImages != null);
     emit(const AuthLoading());
-    await _authRepository.saveProfile(
-      name: name,
-      imageFile: imageFile,
-      birthDate: birthDate,
-      sexualOrientation: sexualOrientation,
-      wantSexualOrientation: wantSexualOrientation,
-    );
+    try {
+      await _authRepository.saveProfile(
+        name: name,
+        description: description,
+        editingProfileImages: editingProfileImages,
+        birthDate: birthDate,
+        sexualOrientation: sexualOrientation,
+        wantSexualOrientation: wantSexualOrientation,
+      );
+    } catch (_) {
+      emit(AuthSuccess(
+          uid: _uid, userPrivate: _userPrivate, errorMessage: '不明なエラーが発生しました'));
+    }
   }
 
   Future<void> logout() async {
