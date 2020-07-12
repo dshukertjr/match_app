@@ -119,14 +119,19 @@ class AuthCubit extends Cubit<AuthState> {
   }) async {
     assert(editingProfileImages != null);
     emit(const AuthLoading());
-    await _authRepository.saveProfile(
-      name: name,
-      description: description,
-      editingProfileImages: editingProfileImages,
-      birthDate: birthDate,
-      sexualOrientation: sexualOrientation,
-      wantSexualOrientation: wantSexualOrientation,
-    );
+    try {
+      await _authRepository.saveProfile(
+        name: name,
+        description: description,
+        editingProfileImages: editingProfileImages,
+        birthDate: birthDate,
+        sexualOrientation: sexualOrientation,
+        wantSexualOrientation: wantSexualOrientation,
+      );
+    } catch (_) {
+      emit(AuthSuccess(
+          uid: _uid, userPrivate: _userPrivate, errorMessage: '不明なエラーが発生しました'));
+    }
   }
 
   Future<void> logout() async {

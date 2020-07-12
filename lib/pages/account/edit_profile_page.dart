@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:app/cubits/auth/auth_cubit.dart';
 import 'package:app/models/editing_profile_image.dart';
 import 'package:app/models/user_private.dart';
+import 'package:app/utilities/app_snackbar.dart';
 import 'package:app/utilities/color.dart';
 import 'package:app/utilities/validator.dart';
 import 'package:app/widgets/custom_loader.dart';
@@ -32,6 +33,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   String _sexualOrientation;
   String _wantingSexualOrientation;
   bool _haveCalledSetup = false;
+  bool _haveEdited = false;
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +45,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
           FlatButton.icon(
             onPressed: () {
               _save(context);
-              Navigator.of(context).pop();
             },
             textColor: appBlue,
             icon: Icon(Feather.check),
@@ -51,17 +52,19 @@ class _EditProfilePageState extends State<EditProfilePage> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(12),
-        child: CubitConsumer<AuthCubit, AuthState>(
-          listener: (BuildContext context, AuthState state) {
-            if (state is AuthSuccess) {
-              Navigator.of(context).pop();
-            }
-          },
-          builder: (BuildContext context, AuthState state) {
-            if (state is AuthSuccess) {
-              return Form(
+      body: CubitConsumer<AuthCubit, AuthState>(
+        listener: (BuildContext context, AuthState state) {
+          if (state.errorMessage != null) {
+            AppSnackbar.error(context: context, message: state.errorMessage);
+          } else if (state is AuthSuccess) {
+            AppSnackbar.regular(context: context, message: '変更が完了いたしました');
+          }
+        },
+        builder: (BuildContext context, AuthState state) {
+          if (state is AuthSuccess) {
+            return SingleChildScrollView(
+              padding: const EdgeInsets.all(12),
+              child: Form(
                 key: _formKey,
                 child: Column(
                   children: <Widget>[
@@ -82,6 +85,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     const SizedBox(height: 24),
                     TextFormField(
                       controller: _nameController,
+                      onChanged: (_) {
+                        _haveEdited = true;
+                      },
                       decoration: const InputDecoration(
                         labelText: '名前',
                       ),
@@ -89,6 +95,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     ),
                     const SizedBox(height: 24),
                     TextFormField(
+                      onChanged: (_) {
+                        _haveEdited = true;
+                      },
                       maxLines: null,
                       maxLength: maxDescriptionLength,
                       controller: _descriptionController,
@@ -104,6 +113,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         labelText: '自分のセクシュアリティ',
                       ),
                       onChanged: (String value) {
+                        _haveEdited = true;
                         setState(() {
                           _sexualOrientation = value;
                         });
@@ -129,6 +139,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         labelText: 'マッチしたい人',
                       ),
                       onChanged: (String value) {
+                        _haveEdited = true;
                         setState(() {
                           _wantingSexualOrientation = value;
                         });
@@ -152,14 +163,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     const SizedBox(height: 100),
                   ],
                 ),
-              );
-            } else {
-              return Center(
-                child: CustomLoader(),
-              );
-            }
-          },
-        ),
+              ),
+            );
+          } else {
+            return Center(
+              child: CustomLoader(),
+            );
+          }
+        },
       ),
     );
   }
@@ -241,6 +252,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   imageQuality: 75,
                 );
                 if (imageFile != null) {
+                  _haveEdited = true;
                   setState(() {
                     _editingProfileImages = EditingProfileImage.addNewImage(
                       editingProfileImages: _editingProfileImages,
@@ -258,11 +270,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  void _save(BuildContext context) {
+  Future<void> _save(BuildContext context) async {
     if (!_formKey.currentState.validate()) {
       return;
     }
-    CubitProvider.of<AuthCubit>(context).saveUserPrivate(
+    if (!_haveEdited) {
+      AppSnackbar.error(context: context, message: '編集をしてから保存してください');
+      return;
+    }
+    await CubitProvider.of<AuthCubit>(context).saveUserPrivate(
       name: _nameController.text,
       description: _descriptionController.text,
       editingProfileImages: _editingProfileImages,

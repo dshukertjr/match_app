@@ -24,43 +24,47 @@ class AccountTab extends StatelessWidget {
               builder: (BuildContext context, AuthState state) {
             if (state is AuthSuccess) {
               final UserPrivate userPrivate = state.userPrivate;
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Center(
-                    child: ProfileImage(
-                      userPrivate,
-                      size: 100,
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    Center(
+                      child: ProfileImage(
+                        userPrivate,
+                        size: 100,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    userPrivate.name,
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.headline4,
-                  ),
-                  const SizedBox(height: 12),
-                  Text(userPrivate.description ?? '',
-                      style: Theme.of(context).textTheme.bodyText1),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      CircleButton(
-                        iconData: Feather.settings,
-                        iconColor: const Color(0xFFcdcdcd),
-                        onPressed: () {},
-                      ),
-                      CircleButton(
-                        iconData: Feather.edit_2,
-                        iconColor: const Color(0xFFcdcdcd),
-                        onPressed: () {
-                          Navigator.of(context)
-                              .push<void>(EditProfilePage.route());
-                        },
-                      ),
-                    ],
-                  ),
-                ],
+                    const SizedBox(height: 12),
+                    Text(
+                      userPrivate.name,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.headline4,
+                    ),
+                    const SizedBox(height: 12),
+                    Text(userPrivate.description ?? '',
+                        style: Theme.of(context).textTheme.bodyText1),
+                    const SizedBox(height: 12),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        CircleButton(
+                          iconData: Feather.settings,
+                          iconColor: const Color(0xFFcdcdcd),
+                          onPressed: () {},
+                        ),
+                        CircleButton(
+                          iconData: Feather.edit_2,
+                          iconColor: const Color(0xFFcdcdcd),
+                          onPressed: () {
+                            Navigator.of(context)
+                                .push<void>(EditProfilePage.route());
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               );
             }
             return Container();

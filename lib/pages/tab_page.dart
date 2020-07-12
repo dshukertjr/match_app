@@ -26,6 +26,11 @@ class _TabPageState extends State<TabPage> {
   @override
   Widget build(BuildContext context) {
     return CubitListener<AuthCubit, AuthState>(
+      listenWhen: (AuthState previousState, AuthState currentState) {
+        final bool isCurrent = ModalRoute.of(context).isCurrent;
+        return isCurrent &&
+            !(previousState is AuthSuccess && currentState is AuthSuccess);
+      },
       listener: navigateOnAuthStateChanged,
       child: Scaffold(
         body: Column(
