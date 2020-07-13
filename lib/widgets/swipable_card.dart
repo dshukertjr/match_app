@@ -14,7 +14,7 @@ class SwipableCard extends StatefulWidget {
         _prospects = prospects,
         super(key: key);
 
-  static double _initialBehindCardScale = 0.95;
+  static const double _initialBehindCardScale = 0.95;
 
   final void Function() _onSwipeRight;
   final void Function() _onSwipeLeft;
