@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 /// Navigate users to the correct page depending on the auth state
 void Function(BuildContext, AuthState) navigateOnAuthStateChanged =
     (BuildContext context, AuthState state) {
+  if (!ModalRoute.of(context).isCurrent) {
+    return;
+  }
   if (state is AuthNoUser) {
     Navigator.of(context).pushAndRemoveUntil<void>(
       LoginPage.route(),

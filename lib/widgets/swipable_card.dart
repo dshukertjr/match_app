@@ -32,6 +32,7 @@ class _SwipableCardState extends State<SwipableCard>
   AnimationController _animationController;
   static const Duration _animationDuration = Duration(milliseconds: 100);
   Offset _likeSymbolOffset = const Offset(1000, 0);
+  Offset _unlikeSymbolOffset = const Offset(-1000, 0);
 
   @override
   Widget build(BuildContext context) {
@@ -49,9 +50,14 @@ class _SwipableCardState extends State<SwipableCard>
               final double symbolMovingDistance = screenWidth / 2 + 60;
               final double likeSymbolHorizontalOffset = symbolMovingDistance -
                   symbolMovingDistance *
-                      (_cardOffset.dx / (screenWidth * 0.3)).clamp(0, 1);
+                      (_cardOffset.dx / (screenWidth * 0.3)).clamp(-1, 1);
+              final double unlikeSymbolHorizontalOffset =
+                  -symbolMovingDistance -
+                      symbolMovingDistance *
+                          (_cardOffset.dx / (screenWidth * 0.3)).clamp(-1, 1);
               setState(() {
                 _likeSymbolOffset = Offset(likeSymbolHorizontalOffset, 0);
+                _unlikeSymbolOffset = Offset(unlikeSymbolHorizontalOffset, 0);
               });
             },
             onPanEnd: (DragEndDetails details) {
@@ -101,6 +107,31 @@ class _SwipableCardState extends State<SwipableCard>
             ),
           ),
         ),
+        Center(
+          child: Transform.translate(
+            offset: _unlikeSymbolOffset,
+            child: Container(
+              padding: const EdgeInsets.all(18),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+                boxShadow: <BoxShadow>[
+                  BoxShadow(
+                    color: appBlue.withOpacity(0.1),
+                    offset: const Offset(0, 4),
+                    blurRadius: 10,
+                    spreadRadius: 0,
+                  ),
+                ],
+              ),
+              child: Icon(
+                Icons.close,
+                color: appRed,
+                size: 48,
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -144,10 +175,13 @@ class _SwipableCardState extends State<SwipableCard>
   Future<void> _animateBack() async {
     final Offset initialCardOffset = _cardOffset;
     final Offset initialLikeSymbolOffset = _likeSymbolOffset;
+    final Offset initialUnlikeSymbolOffset = _unlikeSymbolOffset;
     final double screenWidth = MediaQuery.of(context).size.width;
     final double likeSymbolInitialPosition = screenWidth / 2 + 60;
     final double likeSymbolMovingDistance =
         likeSymbolInitialPosition - initialLikeSymbolOffset.dx;
+    final double unlikeSymbolMovingDistance =
+        -likeSymbolInitialPosition - initialUnlikeSymbolOffset.dx;
     _animationController?.dispose();
     _animationController = AnimationController(
       vsync: this,
@@ -157,10 +191,13 @@ class _SwipableCardState extends State<SwipableCard>
       ..drive(CurveTween(curve: Curves.easeInBack))
       ..addListener(() {
         /// moving back like symbol to the corrent position
-        _likeSymbolOffset = Offset(
-            likeSymbolInitialPosition -
-                likeSymbolMovingDistance * _animationController.value,
-            0);
+        final double likeSymbolHorizontalOffset = likeSymbolInitialPosition -
+            likeSymbolMovingDistance * _animationController.value;
+        final double unlikeSymbolHorizontalOffset = -likeSymbolInitialPosition -
+            unlikeSymbolMovingDistance * _animationController.value;
+        _likeSymbolOffset = Offset(likeSymbolHorizontalOffset, 0);
+
+        _unlikeSymbolOffset = Offset(unlikeSymbolHorizontalOffset, 0);
 
         setState(() {
           _cardOffset = initialCardOffset * _animationController.value;
@@ -191,8 +228,9 @@ class _SwipableCardState extends State<SwipableCard>
         /// moving back like symbol to the corrent position
         final double screenWidth = MediaQuery.of(context).size.width;
         final double likeSymbolInitialPosition = screenWidth / 2 + 60;
-        _likeSymbolOffset =
-            Offset(likeSymbolInitialPosition * _animationController.value, 0);
+        final double likeSymbolHorizontalOffset =
+            likeSymbolInitialPosition * _animationController.value;
+        _likeSymbolOffset = Offset(likeSymbolHorizontalOffset, 0);
 
         setState(() {
           _cardBehindScale = SwipableCard._initialBehindCardScale +
@@ -233,6 +271,12 @@ class _SwipableCardState extends State<SwipableCard>
     )
       ..forward()
       ..addListener(() {
+        final double screenWidth = MediaQuery.of(context).size.width;
+        final double unlikeSymbolInitialPosition = screenWidth / 2 + 60;
+        final double unlikeSymbolHorizontalOffset =
+            -unlikeSymbolInitialPosition * _animationController.value;
+        _unlikeSymbolOffset = Offset(unlikeSymbolHorizontalOffset, 0);
+
         setState(() {
           _cardBehindScale = SwipableCard._initialBehindCardScale +
               (1 - SwipableCard._initialBehindCardScale) *
