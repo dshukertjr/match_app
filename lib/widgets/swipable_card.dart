@@ -1,4 +1,5 @@
 import 'package:app/models/user_public.dart';
+import 'package:app/utilities/color.dart';
 import 'package:app/widgets/prospect_card.dart';
 import 'package:flutter/material.dart';
 
@@ -30,6 +31,7 @@ class _SwipableCardState extends State<SwipableCard>
   double _cardBehindScale = 0.95;
   AnimationController _animationController;
   static const Duration _animationDuration = Duration(milliseconds: 100);
+  Offset _likeSymbolOffset = const Offset(1000, 0);
 
   @override
   Widget build(BuildContext context) {
@@ -42,8 +44,14 @@ class _SwipableCardState extends State<SwipableCard>
         else
           GestureDetector(
             onPanUpdate: (DragUpdateDetails details) {
+              _cardOffset += details.delta;
+              final double screenWidth = MediaQuery.of(context).size.width;
+              final double symbolMovingDistance = screenWidth / 2 + 60;
+              final double likeSymbolHorizontalOffset = symbolMovingDistance -
+                  symbolMovingDistance *
+                      (_cardOffset.dx / (screenWidth * 0.3)).clamp(0, 1);
               setState(() {
-                _cardOffset += details.delta;
+                _likeSymbolOffset = Offset(likeSymbolHorizontalOffset, 0);
               });
             },
             onPanEnd: (DragEndDetails details) {
@@ -68,6 +76,31 @@ class _SwipableCardState extends State<SwipableCard>
               ),
             ),
           ),
+        Center(
+          child: Transform.translate(
+            offset: _likeSymbolOffset,
+            child: Container(
+              padding: const EdgeInsets.all(18),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+                boxShadow: <BoxShadow>[
+                  BoxShadow(
+                    color: appBlue.withOpacity(0.1),
+                    offset: const Offset(0, 4),
+                    blurRadius: 10,
+                    spreadRadius: 0,
+                  ),
+                ],
+              ),
+              child: Icon(
+                Icons.favorite,
+                color: appGreen,
+                size: 48,
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -110,6 +143,11 @@ class _SwipableCardState extends State<SwipableCard>
 
   Future<void> _animateBack() async {
     final Offset initialCardOffset = _cardOffset;
+    final Offset initialLikeSymbolOffset = _likeSymbolOffset;
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double likeSymbolInitialPosition = screenWidth / 2 + 60;
+    final double likeSymbolMovingDistance =
+        likeSymbolInitialPosition - initialLikeSymbolOffset.dx;
     _animationController?.dispose();
     _animationController = AnimationController(
       vsync: this,
@@ -118,6 +156,12 @@ class _SwipableCardState extends State<SwipableCard>
       ..reverse(from: 1)
       ..drive(CurveTween(curve: Curves.easeInBack))
       ..addListener(() {
+        /// moving back like symbol to the corrent position
+        _likeSymbolOffset = Offset(
+            likeSymbolInitialPosition -
+                likeSymbolMovingDistance * _animationController.value,
+            0);
+
         setState(() {
           _cardOffset = initialCardOffset * _animationController.value;
         });
@@ -144,6 +188,12 @@ class _SwipableCardState extends State<SwipableCard>
     )
       ..forward()
       ..addListener(() {
+        /// moving back like symbol to the corrent position
+        final double screenWidth = MediaQuery.of(context).size.width;
+        final double likeSymbolInitialPosition = screenWidth / 2 + 60;
+        _likeSymbolOffset =
+            Offset(likeSymbolInitialPosition * _animationController.value, 0);
+
         setState(() {
           _cardBehindScale = SwipableCard._initialBehindCardScale +
               (1 - SwipableCard._initialBehindCardScale) *
