@@ -37,18 +37,13 @@ class _SwipeTabState extends State<SwipeTab> {
                   builder: (BuildContext context, ProspectState state) {
                 if (state is ProspectSuccess) {
                   final List<UserPublic> prospects = state.prospects;
-                  return Stack(
-                    fit: StackFit.expand,
-                    children: <Widget>[
-                      SwipableCard(
-                        onSwipeRight: () {
-                          CubitProvider.of<ProspectCubit>(context)
-                              .like(prospects.first);
-                        },
-                        onSwipeLeft: () {},
-                        prospects: prospects,
-                      ),
-                    ],
+                  return SwipableCard(
+                    onSwipeRight: () {
+                      CubitProvider.of<ProspectCubit>(context)
+                          .like(prospects.first);
+                    },
+                    onSwipeLeft: () {},
+                    prospects: prospects,
                   );
                 } else {
                   return Center(
