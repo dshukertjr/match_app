@@ -1,7 +1,7 @@
 import 'package:app/cubits/auth/auth_cubit.dart';
 import 'package:app/pages/tabs/chat_tab.dart';
 import 'package:app/pages/tabs/account_tab.dart';
-import 'package:app/pages/tabs/search_tab.dart';
+import 'package:app/pages/tabs/swipe_tab.dart';
 import 'package:app/utilities/auth_navigator.dart';
 import 'package:app/widgets/bottom_tab_bar.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +40,7 @@ class _TabPageState extends State<TabPage> {
                 index: _tabIndex,
                 children: <Widget>[
                   AccountTab(),
-                  SearchTab(),
+                  SwipeTab.create(),
                   ChatTab(),
                 ],
               ),
