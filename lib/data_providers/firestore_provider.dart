@@ -6,6 +6,7 @@ class FirestoreProvider {
   final Firestore _firestore = Firestore.instance;
 
   static const String _userPrivatesCollection = 'userPrivates';
+  static const String _prospectsCollection = 'prospects';
 
   Future<void> saveProfile({
     @required String uid,
@@ -22,5 +23,14 @@ class FirestoreProvider {
   Stream<DocumentSnapshot> userPrivateStream(String uid) {
     assert(uid != null);
     return _firestore.document('$_userPrivatesCollection/$uid').snapshots();
+  }
+
+  Stream<QuerySnapshot> prospectsStream(String uid) {
+    assert(uid != null);
+    return _firestore
+        .collection(_prospectsCollection)
+        .where('prospectFor', isEqualTo: uid)
+        .orderBy('createdAt', descending: true)
+        .snapshots();
   }
 }

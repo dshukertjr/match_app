@@ -1,17 +1,23 @@
 import 'package:app/cubits/prospect/prospect_cubit.dart';
 import 'package:app/models/user_public.dart';
+import 'package:app/repositories/auth_repository.dart';
+import 'package:app/repositories/prospect_repository.dart';
 import 'package:app/utilities/color.dart';
 import 'package:app/widgets/circle_button.dart';
 import 'package:app/widgets/custom_loader.dart';
 import 'package:app/widgets/swipable_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cubit/flutter_cubit.dart';
 
 class SwipeTab extends StatefulWidget {
   static const String name = 'SwipeTab';
   static Widget create() {
     return CubitProvider<ProspectCubit>(
-      create: (_) => ProspectCubit()..initialize(),
+      create: (BuildContext context) => ProspectCubit(
+        prospectRepository: RepositoryProvider.of<ProspectRepository>(context),
+        authRepository: RepositoryProvider.of<AuthRepository>(context),
+      )..initialize(),
       child: SwipeTab(),
     );
   }
@@ -42,7 +48,10 @@ class _SwipeTabState extends State<SwipeTab> {
                       CubitProvider.of<ProspectCubit>(context)
                           .like(prospects.first);
                     },
-                    onSwipeLeft: () {},
+                    onSwipeLeft: () {
+                      CubitProvider.of<ProspectCubit>(context)
+                          .unlike(prospects.first);
+                    },
                     prospects: prospects,
                   );
                 } else {
