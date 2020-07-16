@@ -38,11 +38,9 @@ class ProspectCubit extends Cubit<ProspectState> {
 
   void like(UserPublic prospect) {
     _prospects.removeAt(0);
-    emit(ProspectSuccess(_prospects));
   }
 
   void unlike(UserPublic prospect) {
     _prospects.removeAt(0);
-    emit(ProspectSuccess(_prospects));
   }
 }

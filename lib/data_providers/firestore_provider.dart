@@ -1,4 +1,6 @@
+import 'package:app/models/match_pair.dart';
 import 'package:app/models/user_private.dart';
+import 'package:app/models/user_public.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
@@ -7,6 +9,13 @@ class FirestoreProvider {
 
   static const String _userPrivatesCollection = 'userPrivates';
   static const String _prospectsCollection = 'prospects';
+  static const String _matchCollection = 'match';
+
+  static String _prospectDocumentId({
+    @required UserPublic userPublic,
+    @required String uid,
+  }) =>
+      '$uid${userPublic.uid}';
 
   Future<void> saveProfile({
     @required String uid,
@@ -32,5 +41,22 @@ class FirestoreProvider {
         .where('prospectFor', isEqualTo: uid)
         .orderBy('createdAt', descending: true)
         .snapshots();
+  }
+
+  Future<void> likeProspect({
+    @required String uid,
+    @required MatchPair matchPair,
+    @required UserPublic prospect,
+  }) {
+    final WriteBatch batch = _firestore.batch();
+
+    final String prospectDocId =
+        _prospectDocumentId(userPublic: prospect, uid: uid);
+    batch.delete(_firestore.document('$_prospectsCollection/$prospectDocId'));
+
+    batch.setData(
+        _firestore.document('$_matchCollection/${matchPair.documentId}'),
+        matchPair.toMap());
+    return batch.commit();
   }
 }
