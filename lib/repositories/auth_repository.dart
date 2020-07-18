@@ -56,7 +56,9 @@ class AuthRepository {
     @required String sexualOrientation,
     @required String wantSexualOrientation,
   }) async {
+    assert(name != null);
     assert(editingProfileImages != null);
+
     final String uid = await getUid;
     List<String> imageUrls = <String>[];
     if (editingProfileImages.isNotEmpty) {
@@ -84,6 +86,7 @@ class AuthRepository {
       sexualOrientation: sexualOrientation,
       wantSexualOrientation: wantSexualOrientation,
     );
+
     return _firestoreProvider.saveProfile(uid: uid, userPrivate: userPrivate);
   }
 

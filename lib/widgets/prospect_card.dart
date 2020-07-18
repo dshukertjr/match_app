@@ -141,13 +141,6 @@ class _ProspectCardState extends State<ProspectCard> {
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.bodyText1),
                   const SizedBox(height: 4),
-                  Text(
-                    '${widget._userPublic.distance} km away',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText1
-                        .copyWith(color: const Color(0xFFAAAAAA)),
-                  ),
                 ],
               ),
             ),

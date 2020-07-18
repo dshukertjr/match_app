@@ -1,4 +1,5 @@
 import 'package:app/repositories/auth_repository.dart';
+import 'package:app/repositories/prospect_repository.dart';
 import 'package:app/utilities/color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,6 +29,11 @@ class MyApp extends StatelessWidget {
             authProvider: _authProvider,
             firestoreProvider: _firestoreProvider,
             storageProvider: _storageProvider,
+          ),
+        ),
+        RepositoryProvider<ProspectRepository>(
+          create: (_) => ProspectRepository(
+            firestoreProvider: _firestoreProvider,
           ),
         ),
       ],

@@ -1,5 +1,5 @@
 import 'package:app/cubits/auth/auth_cubit.dart';
-import 'package:app/utilities/auth_navigator.dart';
+import 'package:app/utilities/navitate_on_auth_state_change.dart';
 import 'package:app/widgets/custom_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cubit/flutter_cubit.dart';
@@ -20,7 +20,7 @@ class SplashPage extends StatelessWidget {
     return Scaffold(
       body: CubitListener<AuthCubit, AuthState>(
         listener: (BuildContext context, AuthState state) {
-          navigateOnAuthStateChanged(context, state);
+          navigateOnAuthStateChange(context, state);
         },
         child: Center(
           child: CustomLoader(),

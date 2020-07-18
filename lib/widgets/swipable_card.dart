@@ -78,6 +78,7 @@ class _SwipableCardState extends State<SwipableCard>
             child: Transform.translate(
               offset: _cardOffset,
               child: ProspectCard(
+                key: Key(widget._prospects.first.uid),
                 userPublic: widget._prospects.first,
               ),
             ),
@@ -145,6 +146,7 @@ class _SwipableCardState extends State<SwipableCard>
     return Transform.scale(
       scale: _cardBehindScale,
       child: ProspectCard(
+        key: Key(widget._prospects[1].uid),
         userPublic: widget._prospects[1],
       ),
     );
