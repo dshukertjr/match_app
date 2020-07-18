@@ -52,7 +52,7 @@ class MatchPair {
     @required UserPublic prospect,
     @required UserPublic selfUserPublic,
   }) {
-    if (prospect.uid.compareTo(selfUserPublic.uid) > 0) {
+    if (prospect.uid.compareTo(selfUserPublic.uid) < 0) {
       return MatchPair(
         firstUser: prospect,
         secondUser: selfUserPublic,
