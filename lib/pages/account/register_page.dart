@@ -1,6 +1,6 @@
 import 'package:app/cubits/auth/auth_cubit.dart';
 import 'package:app/utilities/app_snackbar.dart';
-import 'package:app/utilities/auth_navigator.dart';
+import 'package:app/utilities/navitate_on_auth_state_change.dart';
 import 'package:app/utilities/validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cubit/flutter_cubit.dart';
@@ -72,7 +72,7 @@ class _RegisterPageState extends State<RegisterPage> {
             const SizedBox(height: 24),
             CubitConsumer<AuthCubit, AuthState>(
               listener: (BuildContext context, AuthState state) {
-                navigateOnAuthStateChanged(context, state);
+                navigateOnAuthStateChange(context, state);
                 if (state.errorMessage != null) {
                   AppSnackbar.error(
                       context: context, message: state.errorMessage);

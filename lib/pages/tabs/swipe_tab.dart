@@ -6,6 +6,7 @@ import 'package:app/utilities/color.dart';
 import 'package:app/widgets/circle_button.dart';
 import 'package:app/widgets/custom_loader.dart';
 import 'package:app/widgets/swipable_card.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cubit/flutter_cubit.dart';
@@ -33,38 +34,40 @@ class _SwipeTabState extends State<SwipeTab> {
       child: Column(
         children: <Widget>[
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(
-                top: 12,
-                left: 16,
-                right: 16,
-              ),
-              child: CubitBuilder<ProspectCubit, ProspectState>(
-                  builder: (BuildContext context, ProspectState state) {
-                if (state is ProspectSuccess) {
-                  final List<UserPublic> prospects = state.prospects;
-                  return SwipableCard(
-                    onSwipeRight: () {
-                      CubitProvider.of<ProspectCubit>(context)
-                          .like(prospects.first);
-                    },
-                    onSwipeLeft: () {
-                      CubitProvider.of<ProspectCubit>(context)
-                          .unlike(prospects.first);
-                    },
-                    prospects: prospects,
-                  );
-                } else {
-                  return Center(
-                    child: CustomLoader(),
-                  );
-                }
-              }),
-            ),
+            child: _swipeCard(context),
           ),
           _buttons(context),
         ],
       ),
+    );
+  }
+
+  Padding _swipeCard(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        top: 12,
+        left: 16,
+        right: 16,
+      ),
+      child: CubitBuilder<ProspectCubit, ProspectState>(
+          builder: (BuildContext context, ProspectState state) {
+        if (state is ProspectSuccess) {
+          final List<UserPublic> prospects = state.prospects;
+          return SwipableCard(
+            onSwipeRight: () {
+              CubitProvider.of<ProspectCubit>(context).like(prospects.first);
+            },
+            onSwipeLeft: () {
+              CubitProvider.of<ProspectCubit>(context).unlike(prospects.first);
+            },
+            prospects: prospects,
+          );
+        } else {
+          return Center(
+            child: CustomLoader(),
+          );
+        }
+      }),
     );
   }
 

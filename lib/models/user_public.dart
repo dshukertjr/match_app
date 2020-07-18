@@ -1,3 +1,4 @@
+import 'package:app/models/user_private.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
@@ -47,6 +48,18 @@ class UserPublic {
       description: map['description'] as String,
       imageUrls: List<String>.from(map['imageUrls'] as List<dynamic>),
       createdAt: (map['createdAt'] as Timestamp).toDate(),
+    );
+  }
+
+  static UserPublic fromUserPrivate(UserPrivate userPrivate) {
+    assert(userPrivate != null);
+
+    return UserPublic(
+      uid: userPrivate.uid,
+      name: userPrivate.name,
+      description: userPrivate.description,
+      imageUrls: userPrivate.imageUrls,
+      createdAt: userPrivate.createdAt,
     );
   }
 }

@@ -8,6 +8,7 @@ class FirestoreProvider {
   final Firestore _firestore = Firestore.instance;
 
   static const String _userPrivatesCollection = 'userPrivates';
+  static const String _userPublicsCollection = 'userPublics';
   static const String _prospectsCollection = 'prospects';
   static const String _matchCollection = 'match';
 
@@ -24,9 +25,15 @@ class FirestoreProvider {
     assert(uid != null);
     assert(userPrivate != null);
     assert(uid == userPrivate.uid);
-    return _firestore
-        .document('$_userPrivatesCollection/$uid')
-        .setData(userPrivate.toMap(), merge: true);
+
+    final WriteBatch batch = _firestore.batch();
+    batch.setData(_firestore.document('$_userPrivatesCollection/$uid'),
+        userPrivate.toMap());
+    batch.setData(
+      _firestore.document('$_userPublicsCollection/$uid'),
+      UserPublic.fromUserPrivate(userPrivate).toMap(),
+    );
+    return batch.commit();
   }
 
   Stream<DocumentSnapshot> userPrivateStream(String uid) {

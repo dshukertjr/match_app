@@ -18,6 +18,7 @@ class UserPrivate {
     @required this.birthDate,
     @required this.sexualOrientation,
     @required this.wantSexualOrientation,
+    this.createdAt,
   })  : assert(uid != null),
         assert(name != null);
 
@@ -28,6 +29,7 @@ class UserPrivate {
   final DateTime birthDate;
   final String sexualOrientation;
   final String wantSexualOrientation;
+  final DateTime createdAt;
 
   static const List<String> sexualOrientations = <String>[
     SexualOrientation.gay,
@@ -67,6 +69,7 @@ class UserPrivate {
       birthDate: snap.data['birthDate'].toDate() as DateTime,
       sexualOrientation: snap.data['sexualOrientation'] as String,
       wantSexualOrientation: snap.data['wantSexualOrientation'] as String,
+      createdAt: (snap.data['createdAt'] as Timestamp)?.toDate(),
     );
   }
 
@@ -86,6 +89,7 @@ class UserPrivate {
             },
       'sexualOrientation': sexualOrientation,
       'wantSexualOrientation': wantSexualOrientation,
+      'createdAt': createdAt ?? FieldValue.serverTimestamp(),
     }..removeWhere((String key, dynamic value) => value == null);
   }
 }

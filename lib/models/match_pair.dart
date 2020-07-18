@@ -7,6 +7,7 @@ class MatchPair {
     this.firstUser,
     this.secondUser,
     this.uids,
+    this.likedMap,
     this.matchedAt,
   });
 
@@ -19,6 +20,9 @@ class MatchPair {
   /// user ids of the two users
   final List<String> uids;
 
+  /// Whether each user liked or not
+  final Map<String, bool> likedMap;
+
   final DateTime matchedAt;
 
   Map<String, dynamic> toMap() {
@@ -26,6 +30,7 @@ class MatchPair {
       'firstUser': firstUser?.toMap(),
       'secondUser': secondUser?.toMap(),
       'uids': uids,
+      'likedMap': likedMap,
       'matchedAt': matchedAt,
     }..removeWhere((_, dynamic value) => value == null);
   }
@@ -44,20 +49,26 @@ class MatchPair {
   }
 
   static MatchPair fromTwoUserPublic({
-    @required UserPublic userPublic1,
-    @required UserPublic userPublic2,
+    @required UserPublic prospect,
+    @required UserPublic selfUserPublic,
   }) {
-    if (userPublic1.uid.compareTo(userPublic2.uid) > 0) {
+    if (prospect.uid.compareTo(selfUserPublic.uid) > 0) {
       return MatchPair(
-        firstUser: userPublic1,
-        secondUser: userPublic2,
-        uids: <String>[userPublic1.uid, userPublic2.uid],
+        firstUser: prospect,
+        secondUser: selfUserPublic,
+        uids: <String>[prospect.uid, selfUserPublic.uid],
+        likedMap: <String, bool>{
+          'secondUser': true,
+        },
       );
     } else {
       return MatchPair(
-        firstUser: userPublic2,
-        secondUser: userPublic1,
-        uids: <String>[userPublic2.uid, userPublic1.uid],
+        firstUser: selfUserPublic,
+        secondUser: prospect,
+        uids: <String>[selfUserPublic.uid, prospect.uid],
+        likedMap: <String, bool>{
+          'firstUser': true,
+        },
       );
     }
   }

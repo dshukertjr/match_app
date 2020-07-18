@@ -1,6 +1,7 @@
 import 'package:app/cubits/auth/auth_cubit.dart';
 import 'package:app/models/user_private.dart';
 import 'package:app/pages/account/edit_profile_page.dart';
+import 'package:app/utilities/navitate_on_auth_state_change.dart';
 import 'package:app/widgets/adaptive_dialog.dart';
 import 'package:app/widgets/circle_button.dart';
 import 'package:app/widgets/list_tile_white.dart';
@@ -117,14 +118,19 @@ class AccountTab extends StatelessWidget {
   }
 
   void _signOut(BuildContext context) {
+    final AuthCubit authCubit = CubitProvider.of<AuthCubit>(context);
     showDialog<void>(
       context: context,
-      builder: (_) => AdaptiveDialog(
-        title: 'ログアウトしてもよろしいですか？',
-        confirmLabel: 'ログアウト',
-        confirmOnPressed: () {
-          CubitProvider.of<AuthCubit>(context).logout();
-        },
+      builder: (_) => CubitListener<AuthCubit, AuthState>(
+        cubit: authCubit,
+        listener: navigateOnAuthStateChange,
+        child: AdaptiveDialog(
+          title: 'ログアウトしてもよろしいですか？',
+          confirmLabel: 'ログアウト',
+          confirmOnPressed: () {
+            CubitProvider.of<AuthCubit>(context).logout();
+          },
+        ),
       ),
     );
   }

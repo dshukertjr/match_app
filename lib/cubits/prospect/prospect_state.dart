@@ -10,12 +10,19 @@ class ProspectInitial extends ProspectState {
 }
 
 class ProspectSuccess extends ProspectState {
-  const ProspectSuccess(this.prospects);
+  const ProspectSuccess({
+    @required this.prospects,
+    @required this.userPrivate,
+  });
 
   final List<UserPublic> prospects;
+  final UserPrivate userPrivate;
 
   @override
-  List<Object> get props => <Object>[prospects];
+  List<Object> get props => <Object>[
+        prospects,
+        userPrivate,
+      ];
 }
 
 class ProspectEmpty extends ProspectState {

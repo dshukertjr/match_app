@@ -73,11 +73,11 @@ class AuthCubit extends Cubit<AuthState> {
   }) async {
     emit(const AuthLoading());
     try {
-      _setUserPrivateListener();
       _uid = await _authRepository.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
+      _setUserPrivateListener();
     } on PlatformException catch (e) {
       switch (e.code) {
         case 'ERROR_INVALID_EMAIL':
@@ -93,7 +93,8 @@ class AuthCubit extends Cubit<AuthState> {
           emit(const AuthNoUser(errorMessage: 'このユーザーはアカウントを停止されています'));
           break;
         case 'ERROR_TOO_MANY_REQUESTS':
-          emit(const AuthNoUser(errorMessage: '時間を置いてからお試しください'));
+          emit(const AuthNoUser(
+              errorMessage: '短い時間にパスワードを間違えすぎました。時間を置いてからお試しください'));
           break;
         case 'ERROR_OPERATION_NOT_ALLOWED':
           emit(const AuthNoUser(errorMessage: 'メールアドレスとパスワードのログインが許可されていません'));

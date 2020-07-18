@@ -2,7 +2,7 @@ import 'package:app/cubits/auth/auth_cubit.dart';
 import 'package:app/pages/tabs/chat_tab.dart';
 import 'package:app/pages/tabs/account_tab.dart';
 import 'package:app/pages/tabs/swipe_tab.dart';
-import 'package:app/utilities/auth_navigator.dart';
+import 'package:app/utilities/navitate_on_auth_state_change.dart';
 import 'package:app/widgets/bottom_tab_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cubit/flutter_cubit.dart';
@@ -31,7 +31,7 @@ class _TabPageState extends State<TabPage> {
         return isCurrent &&
             !(previousState is AuthSuccess && currentState is AuthSuccess);
       },
-      listener: navigateOnAuthStateChanged,
+      listener: navigateOnAuthStateChange,
       child: Scaffold(
         body: Column(
           children: <Widget>[

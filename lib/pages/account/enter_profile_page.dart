@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:app/cubits/auth/auth_cubit.dart';
 import 'package:app/models/editing_profile_image.dart';
 import 'package:app/models/user_private.dart';
-import 'package:app/utilities/auth_navigator.dart';
+import 'package:app/utilities/navitate_on_auth_state_change.dart';
 import 'package:app/utilities/validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -91,7 +91,7 @@ class _EnterProfilePageState extends State<EnterProfilePage> {
 
   Widget _body(BuildContext context) {
     return CubitListener<AuthCubit, AuthState>(
-      listener: navigateOnAuthStateChanged,
+      listener: navigateOnAuthStateChange,
       child: PageView(
         physics: const NeverScrollableScrollPhysics(),
         controller: _pageController,

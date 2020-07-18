@@ -1,7 +1,7 @@
 import 'package:app/cubits/auth/auth_cubit.dart';
 import 'package:app/pages/account/register_page.dart';
 import 'package:app/utilities/app_snackbar.dart';
-import 'package:app/utilities/auth_navigator.dart';
+import 'package:app/utilities/navitate_on_auth_state_change.dart';
 import 'package:app/utilities/validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cubit/flutter_cubit.dart';
@@ -71,13 +71,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             const SizedBox(height: 24),
             CubitConsumer<AuthCubit, AuthState>(
-              listener: (BuildContext context, AuthState state) {
-                navigateOnAuthStateChanged(context, state);
-                if (state.errorMessage != null) {
-                  AppSnackbar.error(
-                      context: context, message: state.errorMessage);
-                }
-              },
+              listener: navigateOnAuthStateChange,
               builder: (BuildContext context, AuthState state) {
                 Widget buttonChild = const SizedBox(
                   width: 24,

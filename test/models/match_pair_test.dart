@@ -20,7 +20,7 @@ void main() {
         createdAt: DateTime.now(),
       );
       final MatchPair matchPair = MatchPair.fromTwoUserPublic(
-          userPublic1: userPublic1, userPublic2: userPublic2);
+          prospect: userPublic1, selfUserPublic: userPublic2);
       expect(matchPair.documentId, '${userPublic1.uid}${userPublic2.uid}');
     });
   });

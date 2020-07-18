@@ -1,4 +1,3 @@
-import 'package:app/data_providers/auth_provider.dart';
 import 'package:app/data_providers/firestore_provider.dart';
 import 'package:app/models/match_pair.dart';
 import 'package:app/models/user_public.dart';
@@ -27,10 +26,11 @@ class ProspectRepository {
     assert(uid != null);
     assert(prospect != null);
     assert(selfUserPublic != null);
+
     return _firestoreProvider.likeProspect(
         uid: uid,
         matchPair: MatchPair.fromTwoUserPublic(
-            userPublic1: prospect, userPublic2: selfUserPublic),
+            prospect: prospect, selfUserPublic: selfUserPublic),
         prospect: prospect);
   }
 }
