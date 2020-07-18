@@ -1,5 +1,6 @@
 import 'package:app/cubits/auth/auth_cubit.dart';
 import 'package:app/models/user_private.dart';
+import 'package:app/models/user_public.dart';
 import 'package:app/pages/account/edit_profile_page.dart';
 import 'package:app/utilities/navitate_on_auth_state_change.dart';
 import 'package:app/widgets/adaptive_dialog.dart';
@@ -32,7 +33,7 @@ class AccountTab extends StatelessWidget {
                   children: <Widget>[
                     Center(
                       child: ProfileImage(
-                        userPrivate,
+                        UserPublic.fromUserPrivate(userPrivate),
                         size: 100,
                       ),
                     ),

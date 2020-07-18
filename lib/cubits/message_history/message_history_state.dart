@@ -10,10 +10,22 @@ class MessageHistoryInitial extends MessageHistoryState {
 }
 
 class MessageHistorySuccess extends MessageHistoryState {
-  const MessageHistorySuccess(this.messageHistory);
+  const MessageHistorySuccess({
+    @required this.messageHistories,
+    @required this.uid,
+  });
 
-  final List<MatchPair> messageHistory;
+  final List<MatchPair> messageHistories;
+  final String uid;
 
   @override
-  List<Object> get props => <Object>[messageHistory];
+  List<Object> get props => <Object>[
+        messageHistories,
+        uid,
+      ];
+}
+
+class MessageHistoryEmpty extends MessageHistoryState {
+  @override
+  List<Object> get props => <Object>[];
 }

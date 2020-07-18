@@ -21,7 +21,7 @@ class MessageHistoryCubit extends Cubit<MessageHistoryState> {
   final MessageRepository _messageRepository;
 
   StreamSubscription<List<MatchPair>> _messagePairSubscription;
-  List<MatchPair> _messageHistory;
+  List<MatchPair> _messageHistories;
 
   String _uid;
 
@@ -31,8 +31,9 @@ class MessageHistoryCubit extends Cubit<MessageHistoryState> {
     _messagePairSubscription = _messageRepository
         .messageHistoryStream(_uid)
         .listen((List<MatchPair> messageHistory) {
-      _messageHistory = messageHistory;
-      emit(MessageHistorySuccess(_messageHistory));
+      _messageHistories = messageHistory;
+      emit(MessageHistorySuccess(
+          messageHistories: _messageHistories, uid: _uid));
     });
   }
 }
