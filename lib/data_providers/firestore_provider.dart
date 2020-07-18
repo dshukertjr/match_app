@@ -75,4 +75,13 @@ class FirestoreProvider {
         _prospectDocumentId(userPublic: prospect, uid: uid);
     return _firestore.document('$_prospectsCollection/$prospectDocId').delete();
   }
+
+  Stream<QuerySnapshot> messageHistoryStream(String uid) {
+    return _firestore
+        .collection(_matchCollection)
+        .where('uids', arrayContains: uid)
+        .where('likedMap.firstUser', isEqualTo: true)
+        .where('likedMap.secondUser', isEqualTo: true)
+        .snapshots();
+  }
 }

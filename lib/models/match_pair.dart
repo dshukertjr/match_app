@@ -73,6 +73,18 @@ class MatchPair {
     }
   }
 
+  static MatchPair fromSnap(DocumentSnapshot snap) {
+    return MatchPair(
+      firstUser:
+          UserPublic.fromMap(snap.data['firstUser'] as Map<String, dynamic>),
+      secondUser:
+          UserPublic.fromMap(snap.data['secondUser'] as Map<String, dynamic>),
+      uids: List<String>.from(snap.data['uids'] as List<dynamic>),
+      likedMap: Map<String, bool>.from(
+          snap.data['likedMap'] as Map<dynamic, dynamic>),
+    );
+  }
+
   String get documentId {
     return '${uids.first}${uids[1]}';
   }
