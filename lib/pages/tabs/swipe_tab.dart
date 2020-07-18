@@ -6,7 +6,6 @@ import 'package:app/utilities/color.dart';
 import 'package:app/widgets/circle_button.dart';
 import 'package:app/widgets/custom_loader.dart';
 import 'package:app/widgets/swipable_card.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cubit/flutter_cubit.dart';

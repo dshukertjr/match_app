@@ -1,6 +1,5 @@
 import 'package:app/cubits/auth/auth_cubit.dart';
 import 'package:app/pages/account/register_page.dart';
-import 'package:app/utilities/app_snackbar.dart';
 import 'package:app/utilities/navitate_on_auth_state_change.dart';
 import 'package:app/utilities/validator.dart';
 import 'package:flutter/material.dart';
