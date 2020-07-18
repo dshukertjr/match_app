@@ -12,7 +12,7 @@ class ChatPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // TODO dynamically change the title
+        centerTitle: true,
         title: const Text('chat'),
       ),
       body: ListView(),

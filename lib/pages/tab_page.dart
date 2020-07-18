@@ -41,7 +41,7 @@ class _TabPageState extends State<TabPage> {
                 children: <Widget>[
                   AccountTab(),
                   SwipeTab.create(),
-                  ChatTab(),
+                  ChatTab.create(),
                 ],
               ),
             ),

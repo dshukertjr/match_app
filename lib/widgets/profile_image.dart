@@ -1,4 +1,3 @@
-import 'package:app/models/user_private.dart';
 import 'package:app/models/user_public.dart';
 import 'package:flutter/material.dart';
 

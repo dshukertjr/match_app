@@ -1,4 +1,5 @@
 import 'package:app/repositories/auth_repository.dart';
+import 'package:app/repositories/message_repository.dart';
 import 'package:app/repositories/prospect_repository.dart';
 import 'package:app/utilities/color.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,11 @@ class MyApp extends StatelessWidget {
         ),
         RepositoryProvider<ProspectRepository>(
           create: (_) => ProspectRepository(
+            firestoreProvider: _firestoreProvider,
+          ),
+        ),
+        RepositoryProvider<MessageRepository>(
+          create: (_) => MessageRepository(
             firestoreProvider: _firestoreProvider,
           ),
         ),

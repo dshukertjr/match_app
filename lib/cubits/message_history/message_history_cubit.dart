@@ -32,8 +32,12 @@ class MessageHistoryCubit extends Cubit<MessageHistoryState> {
         .messageHistoryStream(_uid)
         .listen((List<MatchPair> messageHistory) {
       _messageHistories = messageHistory;
-      emit(MessageHistorySuccess(
-          messageHistories: _messageHistories, uid: _uid));
+      if (_messageHistories.isEmpty) {
+        emit(MessageHistoryEmpty());
+      } else {
+        emit(MessageHistorySuccess(
+            messageHistories: _messageHistories, uid: _uid));
+      }
     });
   }
 }

@@ -1,6 +1,7 @@
 import 'package:app/cubits/message_history/message_history_cubit.dart';
 import 'package:app/models/match_pair.dart';
 import 'package:app/models/user_public.dart';
+import 'package:app/pages/chat_page.dart';
 import 'package:app/repositories/auth_repository.dart';
 import 'package:app/repositories/message_repository.dart';
 import 'package:app/utilities/time_since.dart';
@@ -36,26 +37,33 @@ class ChatTab extends StatelessWidget {
               return Ink(
                 color: Colors.white,
                 child: ListTile(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).push<void>(ChatPage.route());
+                  },
                   leading: ProfileImage(
                     opponent,
                     size: 50,
                   ),
                   title: Text(opponent.name),
-                  subtitle: Row(
-                    children: <Widget>[
-                      if (messageHistory.lastMessage.isSentByYou(uid))
-                        Icon(Icons.replay),
-                      Text(
-                        messageHistory.lastMessage.getMessageLabel,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                  trailing: Text(
-                    TimeSince.label(messageHistory.lastMessage.createdAt),
-                  ),
+                  subtitle: messageHistory.lastMessage == null
+                      ? null
+                      : Row(
+                          children: <Widget>[
+                            if (messageHistory.lastMessage.isSentByYou(uid) ==
+                                true)
+                              Icon(Icons.replay),
+                            Text(
+                              messageHistory.lastMessage.getMessageLabel,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
+                  trailing: messageHistory.lastMessage == null
+                      ? null
+                      : Text(
+                          TimeSince.label(messageHistory.lastMessage.createdAt),
+                        ),
                 ),
               );
             },

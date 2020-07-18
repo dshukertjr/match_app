@@ -6,7 +6,6 @@ class TimeSince {
     if (time.isAfter(now)) {
       return '今';
     }
-    // TODO get all the cases for time since
     return '${time.year}';
   }
 }
