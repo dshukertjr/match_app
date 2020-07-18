@@ -33,4 +33,11 @@ class ProspectRepository {
             prospect: prospect, selfUserPublic: selfUserPublic),
         prospect: prospect);
   }
+
+  Future<void> dislike({
+    @required UserPublic prospect,
+    @required String uid,
+  }) {
+    return _firestoreProvider.dislikeProspect(uid: uid, prospect: prospect);
+  }
 }

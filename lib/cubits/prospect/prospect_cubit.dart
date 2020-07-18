@@ -50,18 +50,20 @@ class ProspectCubit extends Cubit<ProspectState> {
     });
   }
 
-  Future<void> like(UserPublic prospect) async {
-    final String uid = await _authRepository.getUid;
+  void like(UserPublic prospect) {
     final UserPublic selfUserPublic = UserPublic.fromUserPrivate(_userPrivate);
     _prospectRepository.like(
       prospect: prospect,
       selfUserPublic: selfUserPublic,
-      uid: uid,
+      uid: _uid,
     );
   }
 
-  void unlike(UserPublic prospect) {
-    _prospects.removeAt(0);
+  void dislike(UserPublic prospect) {
+    _prospectRepository.dislike(
+      prospect: prospect,
+      uid: _uid,
+    );
   }
 
   void _emitProspectSuccess() {

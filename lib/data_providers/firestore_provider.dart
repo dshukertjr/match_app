@@ -66,4 +66,13 @@ class FirestoreProvider {
         matchPair.toMap());
     return batch.commit();
   }
+
+  Future<void> dislikeProspect({
+    @required String uid,
+    @required UserPublic prospect,
+  }) {
+    final String prospectDocId =
+        _prospectDocumentId(userPublic: prospect, uid: uid);
+    return _firestore.document('$_prospectsCollection/$prospectDocId').delete();
+  }
 }

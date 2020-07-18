@@ -58,7 +58,7 @@ class _SwipeTabState extends State<SwipeTab> {
               CubitProvider.of<ProspectCubit>(context).like(prospects.first);
             },
             onSwipeLeft: () {
-              CubitProvider.of<ProspectCubit>(context).unlike(prospects.first);
+              CubitProvider.of<ProspectCubit>(context).dislike(prospects.first);
             },
             prospects: prospects,
           );
