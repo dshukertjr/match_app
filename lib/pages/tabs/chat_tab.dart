@@ -25,18 +25,22 @@ class ChatTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CubitBuilder<MessageHistoryCubit, MessageHistoryState>(
-      builder: (BuildContext context, MessageHistoryState state) {
-        if (state is MessageHistorySuccess) {
-          final List<MatchPair> messageHistories = state.messageHistories;
-          final String uid = state.uid;
-          return ListView.separated(
-            itemBuilder: (BuildContext context, int index) {
-              final MatchPair messageHistory = messageHistories[index];
-              final UserPublic opponent = messageHistory.opponent(uid);
-              return Ink(
-                color: Colors.white,
-                child: ListTile(
+    return Material(
+      color: Colors.transparent,
+      child: CubitBuilder<MessageHistoryCubit, MessageHistoryState>(
+        builder: (BuildContext context, MessageHistoryState state) {
+          if (state is MessageHistorySuccess) {
+            final List<MatchPair> messageHistories = state.messageHistories;
+            final String uid = state.uid;
+            return ListView.separated(
+              itemBuilder: (BuildContext context, int index) {
+                final MatchPair messageHistory = messageHistories[index];
+                final UserPublic opponent = messageHistory.opponent(uid);
+                return ListTile(
+                  contentPadding: const EdgeInsets.symmetric(
+                    vertical: 8,
+                    horizontal: 12,
+                  ),
                   onTap: () {
                     Navigator.of(context).push<void>(ChatPage.route());
                   },
@@ -64,24 +68,24 @@ class ChatTab extends StatelessWidget {
                       : Text(
                           TimeSince.label(messageHistory.lastMessage.createdAt),
                         ),
-                ),
-              );
-            },
-            separatorBuilder: (BuildContext context, int index) {
-              return const Divider();
-            },
-            itemCount: messageHistories.length,
-          );
-        } else if (state is MessageHistoryEmpty) {
-          return const Center(
-            child: Text('まだマッチがありません'),
-          );
-        } else {
-          return Center(
-            child: CustomLoader(),
-          );
-        }
-      },
+                );
+              },
+              separatorBuilder: (BuildContext context, int index) {
+                return const Divider();
+              },
+              itemCount: messageHistories.length,
+            );
+          } else if (state is MessageHistoryEmpty) {
+            return const Center(
+              child: Text('まだマッチがありません'),
+            );
+          } else {
+            return Center(
+              child: CustomLoader(),
+            );
+          }
+        },
+      ),
     );
   }
 }
