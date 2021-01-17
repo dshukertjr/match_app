@@ -1,16 +1,16 @@
-import 'package:app/models/user_private.dart';
+import 'package:app/models/user_public.dart';
 import 'package:flutter/material.dart';
 
 class ProfileImage extends StatelessWidget {
   const ProfileImage(
-    UserPrivate userPrivate, {
+    UserPublic userPublic, {
     double size = 50,
     void Function() onPressed,
-  })  : _userPrivate = userPrivate,
+  })  : _userPublic = userPublic,
         _size = size,
         _onPressed = onPressed;
 
-  final UserPrivate _userPrivate;
+  final UserPublic _userPublic;
   final double _size;
   final void Function() _onPressed;
 
@@ -19,12 +19,12 @@ class ProfileImage extends StatelessWidget {
     return ClipOval(
       child: GestureDetector(
         onTap: _onPressed,
-        child: _userPrivate.imageUrls.isEmpty
+        child: _userPublic.imageUrls.isEmpty
             ? ClipOval(
                 child: Container(),
               )
             : Image.network(
-                _userPrivate.imageUrls.first,
+                _userPublic.imageUrls.first,
                 width: _size,
                 height: _size,
                 fit: BoxFit.cover,

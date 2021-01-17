@@ -1,3 +1,4 @@
+import 'package:app/cubits/auth/auth_cubit.dart';
 import 'package:app/cubits/prospect/prospect_cubit.dart';
 import 'package:app/models/user_public.dart';
 import 'package:app/repositories/auth_repository.dart';
@@ -71,24 +72,32 @@ class _SwipeTabState extends State<SwipeTab> {
   }
 
   Widget _buttons(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          _swipeButton(
-            iconData: Icons.close,
-            color: appRed,
-            onPressed: () {},
+    return CubitBuilder<ProspectCubit, ProspectState>(
+        builder: (BuildContext context, ProspectState state) {
+      if (state is ProspectSuccess) {
+        // final List<UserPublic> prospects = state.prospects;
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              _swipeButton(
+                iconData: Icons.close,
+                color: appRed,
+                onPressed: () {},
+              ),
+              _swipeButton(
+                iconData: Icons.favorite,
+                color: appGreen,
+                onPressed: () {},
+              ),
+            ],
           ),
-          _swipeButton(
-            iconData: Icons.favorite,
-            color: appGreen,
-            onPressed: () {},
-          ),
-        ],
-      ),
-    );
+        );
+      } else {
+        return Container();
+      }
+    });
   }
 
   Widget _swipeButton({
